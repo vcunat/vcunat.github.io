@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - du-regexp</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="co">% Naprogramujte test zda řetězec odpovídá</span>
+<span class="co">% regulárnímu výrazu. Backtrackujte</span>
+<span class="co">% přes všechny možnosti ve správném pořadí.</span>
+
+<span class="co">% match(+Pattern, +String)</span>
+
+<span class="co">/* Pro zjednodušení mají vzory následující pravidla:</span>
+<span class="co">  - číslo odpovídá znaku s daným kódem,</span>
+<span class="co">    tedy například match(&quot;abc&quot;, &quot;abc&quot;) uspěje</span>
+<span class="co">  - seznam vzorů odpovídá zřetězení</span>
+<span class="co">  - `any(Seznam)` uspěje pokud uspěje</span>
+<span class="co">    libovolný vzor ze seznamu (priorita zleva doprava)</span>
+<span class="co">  - `rep(N1, N2, Vzor)` odpovídá Vzoru opakovaném</span>
+<span class="co">    N1-krát až N2-krát. N2 může bý také `inf`</span>
+<span class="co">    a `rep(Vzor)` je zkratka za `rep(0,inf,Vzor)`.</span>
+<span class="co">    Preferují se *delší* opakování před kratšími.</span>
+<span class="co">  - `ref(Prom, Vzor)` matchuje Vzor</span>
+<span class="co">    a odpovídající podřetězec naunifikuje na Prom.</span>
+
+<span class="co">  Plný počet bodů jsou 3, bodování bude zhruba</span>
+<span class="co">  odpovídat míře fuknčnosti jednotlivých pravidel.</span>
+<span class="co">*/</span>
+
+<span class="co">% Pro lepší čitelnost zavedeme operátorovou syntaxi</span>
+<span class="kw">:-</span>
+	<span class="fu">op</span>(<span class="dv">180</span><span class="kw">,</span> xfy<span class="kw">,</span> ref)<span class="kw">,</span>	<span class="co">% Var ref Exp</span>
+	<span class="fu">op</span>(<span class="dv">160</span><span class="kw">,</span> fy<span class="kw">,</span> rep)<span class="kw">,</span>	<span class="co">% Digits = rep Digit</span>
+	<span class="fu">op</span>(<span class="dv">140</span><span class="kw">,</span> fy<span class="kw">,</span> any)<span class="kw">,</span>	<span class="co">% Digit = any &quot;0123456789&quot;</span>
+	<span class="kw">true.</span>
+
+
+<span class="co">% match(+Pattern, +String)</span>
+match(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span>) <span class="kw">:-</span> match(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> [])<span class="kw">.</span>
+<span class="co">% match(+Pattern, +String, -UnmatchedPart)</span>
+
+<span class="co">% character code</span>
+match(<span class="dt">Ch</span><span class="kw">,</span> [<span class="dt">Ch</span><span class="fu">|</span><span class="dt">Rest</span>]<span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span> <span class="dt">integer</span>(<span class="dt">Ch</span>)<span class="kw">.</span>
+
+<span class="co">% list means concatenation</span>
+match([]<span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Str</span>)<span class="kw">.</span>
+match([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span>
+	match(<span class="dt">H</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">R1</span>)<span class="kw">,</span>
+	match(<span class="dt">T</span><span class="kw">,</span> <span class="dt">R1</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
+
+<span class="co">% choice</span>
+match(any <span class="dt">Lst</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span>
+	member(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Lst</span>)<span class="kw">,</span>
+	match(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
+
+<span class="co">% reference</span>
+match(<span class="dt">Var</span> ref <span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span>
+	match(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">,</span>
+	append(<span class="dt">Var</span><span class="kw">,</span> <span class="dt">Rest</span><span class="kw">,</span> <span class="dt">Str</span>)<span class="kw">.</span>
+
+<span class="co">% repeat</span>
+match(rep <span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span>	<span class="co">% a shortcut</span>
+	match(rep(<span class="dv">0</span><span class="kw">,</span> inf<span class="kw">,</span> <span class="dt">E</span>)<span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
+match(rep(<span class="dt">I1</span><span class="kw">,</span> <span class="dt">I2</span><span class="kw">,</span> <span class="dt">E</span>)<span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest</span>) <span class="kw">:-</span>	<span class="co">% try longer</span>
+	(<span class="dt">I2</span><span class="kw">=</span>inf<span class="kw">,</span> <span class="dt">I2n</span><span class="kw">=</span>inf <span class="kw">;</span> <span class="dt">integer</span>(<span class="dt">I2</span>)<span class="kw">,</span> <span class="dt">I2&gt;</span><span class="dv">0</span><span class="kw">,</span> <span class="dt">I2n</span> <span class="dt">is</span> <span class="dt">I2</span><span class="dv">-1</span>)<span class="kw">,</span>
+	<span class="dt">I1n</span> <span class="dt">is</span> <span class="dt">max</span>(<span class="dv">0</span><span class="er">,</span><span class="dt">I1</span><span class="dv">-1</span>)<span class="kw">,</span>
+	match(<span class="dt">E</span><span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Rest1</span>)<span class="kw">,</span>
+	match(rep(<span class="dt">I1n</span><span class="kw">,</span> <span class="dt">I2n</span><span class="kw">,</span> <span class="dt">E</span>)<span class="kw">,</span> <span class="dt">Rest1</span><span class="kw">,</span> <span class="dt">Rest</span>)<span class="kw">.</span>
+match(rep(<span class="dv">0</span><span class="kw">,</span> <span class="dt">_</span><span class="kw">,</span> <span class="dt">_E</span>)<span class="kw">,</span> <span class="dt">Str</span><span class="kw">,</span> <span class="dt">Str</span>)<span class="kw">.</span>	<span class="co">% empty repeat</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span>	<span class="dt">AlNum</span> <span class="kw">=</span> <span class="ot">&quot;</span><span class="er">abcdefghijklmnopqrstuvwxyz0123456789</span><span class="ot">&quot;</span><span class="kw">,</span>
+	<span class="dt">AlNums</span> <span class="kw">=</span> rep any <span class="dt">AlNum</span><span class="kw">,</span>
+	<span class="dt">Chars</span> <span class="kw">=</span> rep any [any <span class="dt">AlNum</span>, any <span class="ot">&quot;&lt;&gt;/</span><span class="al"> </span><span class="ot">.&quot;</span>]<span class="kw">,</span>
+	<span class="dt">SimpleTag</span> <span class="kw">=</span> [
+		<span class="dt">Chars</span>,
+		<span class="ot">&quot;&lt;&quot;</span>, <span class="dt">Tag</span> ref <span class="dt">AlNums</span>, <span class="ot">&quot;&gt;&quot;</span>,
+		<span class="dt">Chars</span>,
+		<span class="ot">&quot;&lt;/&quot;</span>, <span class="dt">Tag</span> ref <span class="dt">AlNums</span>, <span class="ot">&quot;&gt;&quot;</span>,
+		<span class="dt">Chars</span>
+	]<span class="kw">,</span>
+	<span class="dt">HTML1</span> <span class="kw">=</span> <span class="ot">&quot;&lt;</span><span class="er">h2</span><span class="ot">&gt;</span><span class="er">nad</span><span class="ot">&lt;/</span><span class="er">h2</span><span class="ot">&gt;</span><span class="al"> </span><span class="ot">&lt;</span><span class="er">p</span><span class="ot">&gt;</span><span class="er">od</span><span class="ot">&lt;</span><span class="er">i</span><span class="ot">&gt;&lt;</span><span class="er">b</span><span class="ot">&gt;</span><span class="er">ti</span><span class="ot">&lt;/</span><span class="er">b</span><span class="ot">&gt;&lt;/</span><span class="er">i</span><span class="ot">&gt;&lt;</span><span class="er">br</span><span class="ot">&gt;</span><span class="er">radek</span><span class="ot">.&lt;/</span><span class="er">p</span><span class="ot">&gt;&quot;</span><span class="kw">,</span>
+	match(<span class="dt">SimpleTag</span><span class="kw">,</span> <span class="dt">HTML1</span>)<span class="kw">.</span>
+...
+<span class="dt">Tag</span> <span class="kw">=</span> [<span class="dv">98</span>]<span class="kw">;</span>
+...
+<span class="dt">Tag</span> <span class="kw">=</span> [<span class="dv">105</span>]<span class="kw">;</span>
+...
+<span class="dt">Tag</span> <span class="kw">=</span> [<span class="dv">112</span>]<span class="kw">;</span>
+...
+<span class="dt">Tag</span> <span class="kw">=</span> [<span class="dv">104</span>, <span class="dv">50</span>]<span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span>	<span class="dt">AlNum</span> <span class="kw">=</span> <span class="ot">&quot;</span><span class="er">abcdefghijklmnopqrstuvwxyz0123456789</span><span class="ot">&quot;</span><span class="kw">,</span>
+	<span class="dt">AlNums</span> <span class="kw">=</span> rep any <span class="dt">AlNum</span><span class="kw">,</span>
+	<span class="dt">Addr</span> <span class="kw">=</span> [
+		<span class="dt">Protocol</span> ref any[<span class="ot">&quot;</span><span class="er">http</span><span class="ot">&quot;</span>, <span class="ot">&quot;</span><span class="er">ftp</span><span class="ot">&quot;</span>], <span class="ot">&quot;://&quot;</span>,
+		<span class="dt">Server</span> ref [ rep [<span class="dt">AlNums</span>,<span class="ot">&quot;.&quot;</span>], <span class="dt">AlNums</span> ],
+		<span class="dt">Port</span> ref rep(<span class="dv">0</span><span class="kw">,</span><span class="dv">1</span><span class="kw">,</span>[ <span class="ot">&quot;:&quot;</span>, any<span class="ot">&quot;0123456789&quot;</span> ]),
+		<span class="dt">Path</span> ref rep [<span class="ot">&quot;/&quot;</span>,<span class="dt">AlNums</span>]
+	]<span class="kw">,</span>
+	match(<span class="dt">Addr</span><span class="kw">,</span> <span class="ot">&quot;</span><span class="er">http</span><span class="ot">://</span><span class="er">vcunat</span><span class="ot">.</span><span class="er">matfyz</span><span class="ot">.</span><span class="er">cz</span><span class="ot">/</span><span class="er">vyuka</span><span class="ot">/</span><span class="er">np</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="dt">AlNums</span> <span class="kw">=</span> any[...]<span class="kw">,</span>
+<span class="dt">Addr</span> <span class="kw">=</span> [...]<span class="kw">,</span>
+<span class="dt">Server</span> <span class="kw">=</span> [<span class="dv">118</span>, <span class="dv">99</span>, <span class="dv">117</span>, <span class="dv">110</span>, <span class="dv">97</span>, <span class="dv">116</span>, <span class="dv">46</span>, <span class="dv">109</span>, <span class="dv">97</span><span class="fu">|</span>...]<span class="kw">,</span>
+<span class="dt">Port</span> <span class="kw">=</span> []<span class="kw">,</span>
+<span class="dt">Path</span> <span class="kw">=</span> [<span class="dv">47</span>, <span class="dv">118</span>, <span class="dv">121</span>, <span class="dv">117</span>, <span class="dv">107</span>, <span class="dv">97</span>, <span class="dv">47</span>, <span class="dv">110</span>, <span class="dv">112</span>] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+
+<span class="co">/* zakladni testy */</span>
+<span class="fu">?-</span>  match(<span class="ot">&quot;</span><span class="er">test</span><span class="ot">&quot;</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">test</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true.</span>
+<span class="fu">?-</span> match(<span class="ot">&quot;</span><span class="er">test</span><span class="ot">&quot;</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">testy</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(<span class="ot">&quot;</span><span class="er">testy</span><span class="ot">&quot;</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">test</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="co">/* any */</span>
+<span class="fu">?-</span> match(any <span class="ot">&quot;</span><span class="er">axbycz</span><span class="ot">&quot;</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">c</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(any <span class="ot">&quot;</span><span class="er">axbycz</span><span class="ot">&quot;</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">p</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(any [<span class="ot">&quot;</span><span class="er">ab</span><span class="ot">&quot;</span>,<span class="ot">&quot;</span><span class="er">cd</span><span class="ot">&quot;</span>]<span class="kw">,</span><span class="ot">&quot;</span><span class="er">cd</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true.</span>
+<span class="co">/* neomezene rep */</span>
+<span class="fu">?-</span>  match(rep any [<span class="ot">&quot;</span><span class="er">ab</span><span class="ot">&quot;</span>,<span class="ot">&quot;</span><span class="er">cd</span><span class="ot">&quot;</span>]<span class="kw">,</span><span class="ot">&quot;&quot;</span>)<span class="kw">.</span>
+<span class="kw">true.</span>
+<span class="fu">?-</span> match(rep any [<span class="ot">&quot;</span><span class="er">ab</span><span class="ot">&quot;</span>,<span class="ot">&quot;</span><span class="er">cd</span><span class="ot">&quot;</span>]<span class="kw">,</span><span class="ot">&quot;</span><span class="er">cdab</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(rep any [<span class="ot">&quot;</span><span class="er">ab</span><span class="ot">&quot;</span>,<span class="ot">&quot;</span><span class="er">cd</span><span class="ot">&quot;</span>]<span class="kw">,</span><span class="ot">&quot;</span><span class="er">abba</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="co">/* omezene rep */</span>
+<span class="fu">?-</span> match(rep(<span class="dv">1</span><span class="kw">,</span><span class="dv">3</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>)<span class="kw">,</span><span class="ot">&quot;</span><span class="er">aaa</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(rep(<span class="dv">1</span><span class="kw">,</span><span class="dv">3</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>)<span class="kw">,</span><span class="ot">&quot;</span><span class="er">aaaa</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> match(rep(<span class="dv">1</span><span class="kw">,</span><span class="dv">3</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>)<span class="kw">,</span><span class="ot">&quot;&quot;</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span>  match(rep(<span class="dv">1</span><span class="kw">,</span><span class="dv">3</span><span class="kw">,</span><span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>)<span class="kw">,</span><span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="kw">true</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="co">/* ref */</span>
+<span class="fu">?-</span> match([<span class="ot">&quot;</span><span class="er">s</span><span class="ot">&quot;</span>, <span class="dt">X</span> ref rep <span class="ot">&quot;</span><span class="er">a</span><span class="ot">&quot;</span>,<span class="ot">&quot;</span><span class="er">e</span><span class="ot">&quot;</span>]<span class="kw">,</span><span class="ot">&quot;</span><span class="er">saae</span><span class="ot">&quot;</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">97</span>, <span class="dv">97</span>] <span class="kw">;</span>
+<span class="kw">false.</span>
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April  8.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

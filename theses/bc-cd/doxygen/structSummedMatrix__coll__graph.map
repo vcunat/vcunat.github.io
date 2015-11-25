@@ -1,0 +1,6 @@
+<area shape="rect" href="$structMatrixSummer.html" title="MatrixSummer\&lt; BSumRes, I \&gt;" alt="" coords="132,208,332,237">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; BSumRes, I \&gt;" alt="" coords="284,101,465,131">
+<area shape="rect" href="$structDoubleNum.html" title="Helper structure for computing with value and squared sums at once." alt="" coords="305,5,444,35">
+<area shape="rect" href="$structMatrixSlice.html" title="A simple generic template for matrices of fixed size, uses shallow copying and manual..." alt="" coords="80,5,211,35">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; PixT \&gt;" alt="" coords="5,155,141,184">
+<area shape="rect" href="$structMatrixSummer.html" title="MatrixSummer objects store partial sums of a matrix, allowing quick computation of..." alt="" coords="111,101,260,131">

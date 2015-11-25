@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - rozdilove</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="co">/* Rozdílové seznamy: S-K kde K je proměnná</span>
+<span class="co">	unifikovaná s koncem seznamu S (K místo []).</span>
+<span class="co">	Například: [1,2,3|K]-K</span>
+<span class="co">	Naprogramujte zretězení (append/3). */</span>
+<span class="co">% append(+S1, +S2, -Zřetězení)</span>
+<span class="co">%append(S1-K1, S2-K2, S1-K2) :- K1=S2.</span>
+append(<span class="dt">A</span><span class="fu">-</span><span class="dt">B</span><span class="kw">,</span> <span class="dt">B</span><span class="fu">-</span><span class="dt">C</span><span class="kw">,</span> <span class="dt">A</span><span class="fu">-</span><span class="dt">C</span>)<span class="kw">.</span>
+
+<span class="co">% empty(+RozdílovýSeznam)</span>
+empty(<span class="dt">A</span><span class="fu">-</span><span class="dt">B</span>) <span class="kw">:-</span> <span class="dt">var</span>(<span class="dt">A</span>)<span class="kw">,</span> <span class="dt">A</span><span class="fu">==</span><span class="dt">B</span><span class="kw">.</span>
+
+<span class="co">% lengthRS(+RozdílovýSeznam, -Délka)</span>
+lengthRS(<span class="dt">L</span><span class="kw">,</span> <span class="dv">0</span>) <span class="kw">:-</span> empty(<span class="dt">L</span>)<span class="kw">.</span>
+lengthRS(<span class="dt">L</span><span class="kw">,</span> <span class="dt">N</span>) <span class="kw">:-</span> <span class="kw">\+</span> empty(<span class="dt">L</span>)<span class="kw">,</span> <span class="dt">L</span> <span class="kw">=</span> [<span class="dt">_</span><span class="fu">|</span><span class="dt">T</span>]<span class="fu">-</span><span class="dt">E</span><span class="kw">,</span>
+	lengthRS(<span class="dt">T</span><span class="fu">-</span><span class="dt">E</span><span class="kw">,</span> <span class="dt">NT</span>)<span class="kw">,</span> <span class="dt">N</span> <span class="dt">is</span> <span class="dt">NT</span> <span class="dt">+</span> <span class="dv">1</span><span class="kw">.</span>
+	<span class="co">% ``\+ Pred`` uspěje právě když Pred neuspěje</span>
+
+<span class="co">% lengthRSA(+RozdílovýSeznam, -Délka)</span>
+lengthRSA(<span class="dt">L</span><span class="kw">,</span> <span class="dt">N</span>) <span class="kw">:-</span> lengthRSA(<span class="dt">L</span><span class="kw">,</span> <span class="dv">0</span><span class="kw">,</span> <span class="dt">N</span>)<span class="kw">.</span>
+lengthRSA(<span class="dt">L</span><span class="kw">,</span> <span class="dt">A</span><span class="kw">,</span> <span class="dt">A</span>) <span class="kw">:-</span> empty(<span class="dt">L</span>)<span class="kw">.</span>
+lengthRSA(<span class="dt">L</span><span class="kw">,</span> <span class="dt">A</span><span class="kw">,</span> <span class="dt">N</span>) <span class="kw">:-</span> <span class="kw">\+</span> empty(<span class="dt">L</span>)<span class="kw">,</span> <span class="dt">L</span> <span class="kw">=</span> [<span class="dt">_</span><span class="fu">|</span><span class="dt">T</span>]<span class="fu">-</span><span class="dt">E</span><span class="kw">,</span> <span class="dt">AT</span> <span class="dt">is</span> <span class="dt">A</span> <span class="dt">+</span> <span class="dv">1</span><span class="kw">,</span>
+	lengthRSA(<span class="dt">T</span><span class="fu">-</span><span class="dt">E</span><span class="kw">,</span> <span class="dt">AT</span><span class="kw">,</span> <span class="dt">N</span>)<span class="kw">.</span>
+
+
+<span class="co">/* Prefixová notace výrazu je prostý seznam operátorů a čísel:</span>
+<span class="co">	operátor ++ notace L. argumentu ++ notace P. argumentu</span>
+<span class="co">	Pro jednoduchost: binární -, * a čísla (number/1).</span>
+<span class="co">	Příklad: (5-2)*(7-3)  &lt;-&gt;  [*, -, 5, 2, -, 7, 3]  */</span>
+<span class="co">% Převeďte prologovský výraz do prefixové notace v lineárním čase.</span>
+<span class="co">% vyr2pref(+Výraz, -PrefixSeznam)</span>
+vyr2pref(<span class="dt">E</span><span class="kw">,</span> [<span class="dt">E</span><span class="fu">|</span><span class="dt">T</span>]<span class="fu">-</span><span class="dt">T</span>) <span class="kw">:-</span> <span class="dt">number</span>(<span class="dt">E</span>)<span class="kw">.</span>
+vyr2pref(<span class="dt">L</span><span class="fu">-</span><span class="dt">P</span><span class="kw">,</span> <span class="dt">O</span>) <span class="kw">:-</span> vyr2pref(<span class="dt">L</span><span class="kw">,</span> <span class="dt">LH</span><span class="fu">-</span><span class="dt">LT</span>)<span class="kw">,</span> vyr2pref(<span class="dt">P</span><span class="kw">,</span> <span class="dt">PP</span>)<span class="kw">,</span>
+	append([<span class="fu">-|</span><span class="dt">LH</span>]<span class="fu">-</span><span class="dt">LT</span><span class="kw">,</span> <span class="dt">PP</span><span class="kw">,</span> <span class="dt">O</span>)<span class="kw">.</span>
+vyr2pref(<span class="dt">L</span><span class="fu">+</span><span class="dt">P</span><span class="kw">,</span> <span class="dt">O</span>) <span class="kw">:-</span> vyr2pref(<span class="dt">L</span><span class="kw">,</span> <span class="dt">LH</span><span class="fu">-</span><span class="dt">LT</span>)<span class="kw">,</span> vyr2pref(<span class="dt">P</span><span class="kw">,</span> <span class="dt">PP</span>)<span class="kw">,</span>
+	append([<span class="fu">+|</span><span class="dt">LH</span>]<span class="fu">-</span><span class="dt">LT</span><span class="kw">,</span> <span class="dt">PP</span><span class="kw">,</span> <span class="dt">O</span>)<span class="kw">.</span>
+
+
+<span class="co">% A opačný směr, případně obousměrně?</span>
+<span class="co">% pref2vyr(+PrefixSeznam, -Výraz)</span>
+<span class="co">% Můžete si zkusit sami, není to komplikovanější.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span> lengthRSA([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span><span class="fu">|</span><span class="dt">K</span>]<span class="fu">-</span><span class="dt">K</span><span class="kw">,</span> <span class="dt">L</span>)<span class="kw">.</span>
+<span class="dt">L</span> <span class="kw">=</span> <span class="dv">3</span> <span class="kw">;</span>
+<span class="kw">false.</span></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, March 12.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

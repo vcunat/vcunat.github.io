@@ -1,0 +1,6 @@
+<area shape="rect" href="$classMStdDomains.html#a787de930afda6e9755747054f561d19" title="Performs a simple 33%x66% image horizontal shrink (dimensions belong to the destination)..." alt="" coords="260,5,473,35">
+<area shape="rect" href="$classMStdDomains.html#2b725d60d2760e92a6c0c6179a732ad1" title="Performs 50% shrink with 45&#45;degree anticlockwise rotation (side &#45; the length of the..." alt="" coords="261,59,472,88">
+<area shape="rect" href="$classMStdDomains.html#568d07114f60c323fb388017979cfac5" title="Performs a simple 50%^2 image shrink (dimensions belong to the destination)." alt="" coords="275,112,459,141">
+<area shape="rect" href="$classMStdDomains.html#87e2dc950f5d4e3726d7d2e2570da9ea" title="Performs a simple 66%x33% image vertical shrink (dimensions belong to the destination)..." alt="" coords="267,165,467,195">
+<area shape="rect" href="$namespaceMatrixWalkers.html#f40146ad3b6dcb1bb5919d1efc936d93" title="A flavour of walkOperate() choosing the right Rotation_* iterator based on rotation..." alt="" coords="237,243,496,272">
+<area shape="rect" href="$classMStdDomains.html#b211afb5c3646367540f143d65157a2f" title="Prepares domains in already initialized pools (and invalidates summers, etc. )." alt="" coords="545,85,748,115">

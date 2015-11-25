@@ -1,0 +1,93 @@
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+	<TITLE>Fraktální kompresor</TITLE>
+</HEAD>
+
+<BODY>
+
+<H1 ALIGN="CENTER">Fraktální kompresor</H1>
+
+
+<H2>1 Instalace</H2>
+<P>
+Program není nutné nijak instalovat, lze ho spouštět z&nbsp;libovolného
+umístění. Pro spouštění není nutné mít nainstalované knihovny Qt.
+Ve verzi pro Windows jsou potřebné knihovny Qt systémem načteny z&nbsp;adresáře
+spustitelného souboru. Linuxové systémy knihovny Qt obvykle obsahují
+a pak lze program spouštět také bězným způsobem, pro použití přiložených
+knihoven je nutné spouštět program spuštěním příkazu ''<TT>LD_LIBRARY_PATH=. ./fractal</TT>''
+v&nbsp;adresáři se spustitelným souborem.
+</P>
+
+<H2>2 Používání programu</H2>
+<P>
+Po spuštění programu je zobrazeno hlavní okno uživatelského rozhraní.
+V&nbsp;něm lze pomocí výběru položek menu provádět všechny dostupné akce.
+</P><P>
+Program umí základní operace s&nbsp;bitmapovými obrázky&nbsp;&mdash; načíst obrázek
+a zobrazit ho v&nbsp;okně, uložit zobrazený obrázek a porovnat zobrazený
+obrázek s&nbsp;obrázkem v&nbsp;souboru (mezi podporované formáty patří <TT>*.png
+*.bmp</TT> a <TT>*.jpg</TT>).
+</P><P>
+Po načtení bitmapového obrázku je možné zahájit fraktální kompresi.
+Během procesu je zobrazen průběh a je možné proces zrušit. Po skončení
+je zobrazena informace o&nbsp;dosažené kvalitě a dekódovaný obrázek je
+zobrazen v&nbsp;okně. Před kompresí je možné nastavit parametry celého
+stromu modulů. Nastavení lze také ukládat do souborů a zpětně nahrávat.
+Po zkomprimování je možné výsledek uložit do souboru <TT>*.fci</TT>.
+</P><P>
+Uložené soubory ve fraktálním formátu je také možné načíst a zobrazit
+v&nbsp;okně. Fraktálně komprimovaný obrázek zobrazený v&nbsp;okně programu
+lze nechat ''vyšedit'', ručně iterovat zobrazení, nebo fraktálně
+přibližovat.
+</P><P>
+Uživatelské rozhraní je v&nbsp;základní podobě v&nbsp;Anglickém jazyce. Program
+při startu načte soubor s&nbsp;překladem pro jazyk systému, na kterém
+je spouštěn. Jazyk lze také nastavit přímo v&nbsp;hlavním okně programu.
+K&nbsp;programu je přiložen pouze český překlad.
+</P>
+
+<H2>3 Vývojová dokumentace</H2>
+
+<P>
+Nejdůležitější vlastnosti implementace jsou rozebrány v&nbsp;textu bakalářské
+práce. Orientaci ve zdrojových kódech může dále usnadnit vygenerovaná
+dokumentace, která se nachází v&nbsp;<TT><A HREF="doxygen/index.html">doxygen/index.html</A></TT>.
+</P><P>
+Pro překlad zdrojových kódů je nutné mít nainstalované knihovny <A HREF="http://www.qtsoftware.com/products/">Qt</A>.
+Kód je upraven pro překlad pomocí <A HREF="http://gcc.gnu.org">GCC</A>&nbsp;&mdash;
+na Windows pro <A HREF="http://mingw.org">MinGW</A> distribuci s&nbsp;verzí
+překladače 3.x.x a na Linuxu pro verzi překladače 4.x.x.
+</P><P>
+Samotný překlad lze provést dvojicí příkazů ''<TT>qmake</TT>'' a
+''<TT>make release</TT>'' v&nbsp;adresáři se zdrojovými soubory.
+</P>
+
+<H2>4 Obsah adresářů</H2>
+
+<UL>
+<LI>adresáře <TT><A HREF="bin-win">bin-win</A></TT> a <TT><A HREF="bin-lin">bin-lin</A></TT> obsahují spustilelný soubor
+programu pro Windows a Linux včetně knihoven a českého překladu
+</LI>
+<LI>adresář <TT><A HREF="doxygen">doxygen</A></TT> obsahuje dokumentaci generovanou z&nbsp;komentářů
+ve zdrojových kódech programem <A HREF="http://doxygen.org">Doxygen</A>
+</LI>
+<LI>adresář <TT><A HREF="graphs">graphs</A></TT> obsahuje černobílé a barevné grafy zobrazující
+závislost doby komprese a kvality na kompresním poměru pro šest černobílých
+testovacích obrázků
+</LI>
+<LI>adresář <TT><A HREF="images">images</A></TT> obsahuje obrázky použité pro vyhodnocení programu
+a podadresář <TT><A HREF="images/more">images/more</A></TT> obsahuje další černobílé i barevné
+testovací obrázky
+</LI>
+<LI>adresář <TT><A HREF="source">source</A></TT> obsahuje zdrojové kódy programu, přičemž převzaté
+soubory se nachází v&nbsp;adresáři <TT><A HREF="source/FerrisLoki">source/FerrisLoki</A></TT>
+</LI>
+<LI>adresář <TT><A HREF="text">text</A></TT> obsahuje <A HREF="text/bc-bw.pdf">černobílou</A> a 
+<A HREF="text/bc-color.pdf">barevnou</A> verzi textu bakalářské
+práce ve formátu PDF
+</LI>
+</UL>
+</BODY>
+</HTML>

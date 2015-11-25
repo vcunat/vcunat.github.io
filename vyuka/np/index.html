@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Cvičení z Neprocedurálního programování</title>
+	<link rel="stylesheet" type="text/css" href="../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div id="TOC" class="level2"><h1>Cvičení z Neprocedurálního programování</h1> <ul>
+ <li><a href="#obecné-informace">Obecné informace</a></li>
+ <li><a href="#co-bylobude-na-cvičeních">Co bylo/bude na cvičeních</a></li>
+ <li><a href="#prolog">Prolog</a></li>
+ <li><a href="#haskell">Haskell</a></li>
+ <li><a href="#zápočtové-programy">Zápočtové programy</a><ul>
+ <li><a href="#témata-obecně">Témata obecně</a></li>
+ <li><a href="#příklady-témat">Příklady témat</a></li>
+ </ul></li>
+ <li><a href="#navazující-předměty">Navazující předměty</a><ul>
+ <li><a href="#prolog-1">Prolog</a></li>
+ <li><a href="#haskell-1">Haskell</a></li>
+ </ul></li>
+ </ul> </div>
+<div id="obecné-informace" class="section level2">
+<h2>Obecné informace</h2>
+<p>Pro zápočet požaduji:</p>
+<ul>
+<li><a href="#zápočtové-programy">zápočtový program</a> v <a href="#prolog">Prologu</a> nebo <a href="#haskell">Haskellu</a></li>
+<li>alespoň polovinu všech <strong><a href="15cv/body.html">bodů za domácí úlohy</a></strong> a zároveň alespoň polovinu všech bodů za úlohy v jazyce ve kterém <strong>ne</strong>píšete zápočtový program (nebo individuální dohoda, raději předem)</li>
+<li><em>nepožaduji</em> účast; zadání domácích úkolů budou zde, řešení posílejte e-mailem</li>
+</ul>
+</div>
+<div id="co-bylobude-na-cvičeních" class="section level2">
+<h2>Co bylo/bude na cvičeních</h2>
+<dl>
+<dt>19.2.</dt>
+<dd><p><a href="15cv/rodina.html">Rodinné vztahy</a> a <a href="15cv/peano.html">peanova aritmetika</a>.</p>
+Domácí úkol: <a href="15cv/peano.html">dělení v peanově aritmetice</a>.
+</dd>
+<dt>26.2.</dt>
+<dd><p>Více o strukturách v Prologu: <a href="15cv/stromy.html">stromy</a>, <a href="15cv/seznamy.html">seznamy</a>.</p>
+Domácí úkol: <a href="15cv/du-stromy.html">konstrukce stromu</a>.
+</dd>
+<dt>5.3.</dt>
+<dd><p><a href="15cv/akumulator.html">Akumulátory</a>, stručný přehled <a href="pl-syntaxe.html#aritmetika">aritmetiky v prologu</a>.</p>
+</dd>
+<dt>12.3.</dt>
+<dd><p><a href="15cv/rozdilove.html">Rozdílové seznamy</a>.</p>
+Domácí úkol: <a href="15cv/du-fronta.html">rychlá fronta</a>.
+</dd>
+<dt>19.3.</dt>
+<dd><p>Prohledávání prostorů: <a href="15cv/damy.html">problém N dam</a>.</p>
+Domácí úkol: <a href="15cv/du-podstromy.html">podstromy</a>.
+</dd>
+<dt>26.3.</dt>
+<dd>Zrušeno pro nemoc.
+</dd>
+<dt>2.4.</dt>
+<dd><p>Pokračování <a href="15cv/prohled.html">prohledávání možností</a>.</p>
+Domácí úkol: <a href="15cv/du-regexp.html">regulární výrazy</a>. <!-- polovina semestru -->
+</dd>
+<dt>9.4.</dt>
+<dd><p>Návrat ke <a href="15cv/vyhodnocovani.html">způsobu vyhodnocování</a> – řez, apod. (konec Prologu)</p>
+Domácí úkol: <a href="15cv/du-most.html">překračování mostu</a> (poslední v Prologu).
+</dd>
+<dt>16.4.</dt>
+<dd><p><a href="15cv/hs-uvod.html">Úvod do Haskellu</a>.</p>
+Domácí úkol: doporučuji začít přemýšlet o <a href="#zápočtové-programy">zápočtovém programu</a>.
+</dd>
+<dt>23.4.</dt>
+<dd><p><a href="15cv/hs-seznamy.html">Práce se seznamy</a>.</p>
+Domácí úkol: <a href="15cv/du-seznam-cisel.html">seznam čísel</a>.
+</dd>
+<dt>30.4.</dt>
+<dd><p>Plán: <a href="15cv/hs-seznamy2.html">znova seznamy</a>.</p>
+Domácí úkol: <a href="15cv/du-segment.html">segment</a>.
+</dd>
+<dt>7.5.</dt>
+<dd><p>Definice (datových) typů, case, apod.: <a href="15cv/hs-data.html">binární vyhledávací stromy</a>.</p>
+Domácí úkol: <a href="15cv/du-mobil.html">mobily</a>.
+</dd>
+<dt>14.5.</dt>
+<dd>Odkázání na některé debugovací možnosti: <a href="http://hackage.haskell.org/package/base/docs/Debug-Trace.html">ladící výpisy</a>, <a href="http://www.haskell.org/ghc/docs/latest/html/users_guide/ghci-debugger.html">“krokování” v ghci</a> (jde i “krokovat zpět”, přehled příkazů pomocí <code>:help</code>). <a href="hs-syntaxe.html#Typové-třídy">Typové třídy</a>. Odkázání na užitečné knihovny pro <a href="hs-knihovny.html">pole</a> a <a href="http://hackage.haskell.org/package/containers">kontejnery</a>.
+</dd>
+<dt>21.5.</dt>
+<dd><p>Plán: monády, vstup a výstup, apod.</p>
+<p>Domácí úkol: <a href="15cv/du-sort.html">unix-like sort</a>, posílejte <strong>do konce května</strong>.</p>
+Počet bodů z domácích úkolů potřebných pro zápočet už se nebude měnit, ale v případě zájmu přidám ještě nějaký bonusový úkol (který tuto hranici neposune).
+</dd>
+</dl>
+<!--
+	Domácí dvoj-úkol: [simulace hry Life](15cv/du-life.html).
+	První část (úkol 10) posílejte **do 20.5. 23:59**, druhou část do konce května.
+
+	Posílejte samostatně funkční zdroják v příloze,
+	používejte stejný název funkce a stejné významy parametrů...
+	(kvůli snadnějšímu testování).
+21.5.
+  ~	Poslední cvičení. Ukázka způsobů debugování při líném vyhodnocování (v GHCi), s bližším náhledem na (pořadí) vyhodnocování v Haskellu ([reference](http://www.haskell.org/ghc/docs/latest/html/users_guide/ghci-debugger.html)).
+	Něco k [IO](http://hackage.haskell.org/packages/archive/base/latest/doc/html/System-IO.html),
+	ještě jeden příklad na líná [pole](15cv/pole.html) (nejdelší společná podposloupnost).
+
+	Počet bodů z domácích úkolů potřebných pro zápočet už se nebude měnit,
+	ale v případě zájmu přidám ještě nějaký bonusový úkol (který tuto hranici neposune).
+
+<!--
+Prolog (možná témata):
+	- I/O; zmínit edinburgh a ISO
+	- práce s databází predikátů
+	- findall, repeat, once, apod.
+	- debugging
+Haskell (možná témata):
+	- pole
+	- I/O a monády
+	- debugging
+
+
+Příklady:
+	obousměrně: Okasaki 10.1.2
+-->
+
+
+</div>
+<div id="prolog" class="section level2">
+<h2>Prolog</h2>
+<ul>
+<li>doporučovaný interpret je <a href="http://swi-prolog.org">SWI prolog</a>, lze také použít třeba <a href="http://gprolog.org">GNU prolog</a> nebo <a href="http://www.sics.se/sicstus/">SICStus prolog</a> (všechny jsou v labu, prof. Barták <a href="http://kti.ms.mff.cuni.cz/~bartak/podminky/index.html">poskytuje licence na SICStus</a>)</li>
+<li>SWI prolog obsahuje dobrou dokumentaci, kterou lze vyvolat dotazem <code>?- help(</code>něco<code>).</code></li>
+<li><a href="techniky.html">neprocedurální techniky</a>, <a href="pl-syntaxe.html">přehled některých vlastností Prologu</a></li>
+<li>odkazy jinam (En): <a href="https://sites.google.com/site/prologsite/">exercises</a>, <a href="http://kti.ms.mff.cuni.cz/~bartak/prolog/">Barták’s guide</a>, <a href="http://www.amzi.com/AdventureInProlog/">tutorial to create an adventure</a></li>
+</ul>
+</div>
+<div id="haskell" class="section level2">
+<h2>Haskell</h2>
+<ul>
+<li>odkazovník <a href="http://haskell.org">http://haskell.org</a> pro vše okolo Haskellu
+<ul>
+<li><em>GHC</em>: doporučený kompilátor, interpreter, debugger, spouštěč skriptů (<code>runhaskell</code>)</li>
+<li>raději nepoužívat <em>hugs</em> (neudržované)</li>
+<li>knihovny na <a href="http://hackage.haskell.org">Hackage</a>, API hledače <a href="http://hayoo.fh-wedel.de/">Hayoo</a> (prohledává i Hackage) a <a href="http://haskell.org/hoogle">Hoogle</a> (prohledává i dle typů)</li>
+<li>existuje i specializovaný editor <a href="http://leksah.org">leksah</a>, plugin do Eclipse, …</li>
+</ul></li>
+<li>online přístupné knihy:
+<ul>
+<li>učebnice <a href="http://learnyouahaskell.com/">Learn You a Haskell</a>, i s českou verzí <a href="http://naucte-se.haskell.cz/">Naučte se Haskell!</a></li>
+<li>praktický přístup - <a href="http://book.realworldhaskell.org/read/">Real World Haskell</a>, je i v <a href="http://www.mff.cuni.cz/fakulta/lib/">MS knihovně</a></li>
+</ul></li>
+<li><a href="techniky.html">neprocedurální techniky</a>, <a href="hs-syntaxe.html">přehled syntaxe Haskellu</a> a <a href="hs-knihovny.html">něco o knihovnách</a></li>
+</ul>
+</div>
+<div id="zápočtové-programy" class="section level2">
+<h2>Zápočtové programy</h2>
+<ul>
+<li>témata domlouvejte se mnou e-mailem</li>
+<li>s programem odevzdáváte také vhodná testovací data. Program by měl umět je načíst ze zadaného souboru, ale záleží na konkrétním tématu. Počítejte s tím, že budu zkoušet i jiné vstupy. <!-- - obvykle budu také chtít osobní předvedení programu, kde v pár minutách vysvětlíte jakým způsobem to funguje.  TODO --></li>
+</ul>
+<div id="témata-obecně" class="section level3">
+<h3>Témata obecně</h3>
+<ul>
+<li>defaultní jazyk je Prolog (protože se probere s dostatečným předstihem), ale Haskell vůbec nevadí</li>
+<li>minimální obtížnost <em>tématu</em> odpovídá zhruba 100 řádkům kódu (+navíc komentáře, prázdné řádky, apod.)</li>
+<li><p>pro Prolog jsou například vhodná témata využívající backtracking a/nebo unifikaci, především z oblasti umělé inteligence. Kromě hloupého prohledávání je potřeba použít alespoň nějaké jednoduché heruristiky.</p>
+Můžete ale přijít s libovolným tématem přiměřené obtížnosti, například v Haskellu se dají programovat různé utilitky, zvláště s využitím <a href="http://hackage.haskell.org">knihoven</a> kterých je dostupné velké množství. <a href="http://lambda.haskell.org/platform/doc/current/index.html">Nejužitečnější knihovny</a> se distribuují přímo v rámci <a href="http://www.haskell.org/platform/">Haskell Platform</a>.</li>
+<li><p>požaduji dobře čitelný kód: každá netriviální procedura/funkce je okomentovaná (takže je každému zřejmé co má dělat), identifikátory jsou rozumně pojmenované, kód je hezky indentovaný, apod.</p></li>
+</ul>
+</div>
+<div id="příklady-témat" class="section level3">
+<h3>Příklady témat</h3>
+<ul>
+<li>můžete se inspirovat třeba u jiných cvičících, třeba <a href="http://kti.mff.cuni.cz/%7Ehric/vyuka/pl_prikl_win.pdf">Hric</a> a <a href="http://kti.ms.mff.cuni.cz/%7Ebartak/priklady.html">Barták</a></li>
+<li>příklady minulých témat pro inspiraci:
+<ul>
+<li>zjednodušování symbolických výrazů nebo symbolická integrace</li>
+<li>těžké problémy: splnitelnost CNF, obchodní cestující (aproximačně, evolučně, …)</li>
+<li>řešení různých rébusů:
+<ul>
+<li>sudoku: standardní, Killer, greater-than</li>
+<li><a href="http://en.wikipedia.org/wiki/Zebra_Puzzle">zebra</a>, <a href="http://en.wikipedia.org/wiki/Griddler">griddlers</a>, mastermind, přelévání vody</li>
+<li>generování akordového doprovodu :-)</li>
+<li>generování rébusů, například křížovek</li>
+</ul></li>
+<li>různé hry, například řešení šachových koncovek, piškvorky, <a href="http://en.wikipedia.org/wiki/Quarto_(board_game)">Quatro</a></li>
+<li>Eliza</li>
+<li>různé algoritmy a struktury, hlavně z předmětů ADS</li>
+<li>utility v Haskellu, například <a href="http://jaspervdj.be/hakyll/">generování webových stránek</a> (generují i tyto stránky)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="navazující-předměty" class="section level2">
+<h2>Navazující předměty</h2>
+<div id="prolog-1" class="section level3">
+<h3>Prolog</h3>
+<ul>
+<li><a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NOPT042"><em>Programování s omezujícími podmínkami</em></a> ukazuje jednu z nejdůležitějších aplikací Prologu, nově i včetně používání na cvičeních.</li>
+<li><em>Logické programování <a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL076">I</a></em> a <em><a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL077">II</a></em> se zaměřuje na teorii za logickým programováním.</li>
+<li><a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL022"><em>Metody logického programování</em></a> se zabývají algoritmy implementace kompilace/interpretace logického programování.</li>
+</ul>
+</div>
+<div id="haskell-1" class="section level3">
+<h3>Haskell</h3>
+<ul>
+<li><em>Lambda-kalkulus a funkcionální programování <a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL078">I</a></em> a <em><a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL079">II</a></em> se zaměřuje na základní teorii za funkcionálním programováním.</li>
+<li><a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NAIL097"><em>Funkcionální programování</em></a> nezávisle na ostatních předmětech ukazuje další zajímavější části teorie za funkcionálním programováním, metody implementace a souvislosti s jinými obory (teorie kategorií, Curry-Howard correspondece).</li>
+<li>(neběží) <a href="http://is.cuni.cz/studium/predmety/index.php?tid=&amp;do=predmet&amp;kod=NPRG040"><em>Pokročilé techniky funkcionálního programování</em></a> se zabývá hlubšímy aspekty Haskellu, se zaměřením na používání (ne teorii).</li>
+</ul>
+</div>
+</div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May 20.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

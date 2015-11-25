@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - DÚ: nejdelší segment</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>DÚ: nejdelší segment</h1> 
+<p>Naprogramujte funkci která najde v daném seznamu čísel nejdelší segment s kladným součtem.</p>
+<p>Body podle složitosti řešení: kvadraticky za polovinu, lineárně za plný počet (3, případně různé stavy mezi).</p>
+<p>Nápověda: jak poznat zda se vybraný segment dá nějak prodloužit (doprava)?</p>
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Maybe</span> (mapMaybe)
+<span class="kw">import </span><span class="dt">System.Random</span> (mkStdGen, randoms)
+
+segment xs <span class="fu">=</span> <span class="kw">let</span>
+	<span class="co">--create a list of cumulative sums</span>
+	cumSum <span class="fu">=</span> scanl (<span class="fu">+</span>) <span class="dv">0</span> xs
+	<span class="co">-- lists of prefix minimums and suffix maximums of cumulative sums</span>
+	pmaxs_cs <span class="fu">=</span> scanl1 min cumSum
+	smins_cs <span class="fu">=</span> scanr1 max cumSum
+	<span class="co">-- walk the lists above simultaneously so that minVal &lt; maxVal,</span>
+	<span class="co">-- and remember the best result so far (both lists are descending)</span>
+	<span class="co">--fBest :: (Int,[Int]) -&gt; (Int,[Int]) -&gt; [Int] -&gt; [Int] -&gt; [Int]</span>
+	fBest now<span class="fu">@</span>(nLen,nStart) best<span class="fu">@</span>(bLen,bStart) aMins<span class="fu">@</span>(min0<span class="fu">:</span>mins) aMaxs<span class="fu">@</span>(max0<span class="fu">:</span>maxs)
+		<span class="fu">|</span> min0 <span class="fu">&lt;=</span> max0 <span class="fu">=</span> fBest (nLen<span class="fu">+</span><span class="dv">1</span>,nStart)      (max now best) aMins maxs
+		<span class="fu">|</span> otherwise   <span class="fu">=</span> fBest (nLen<span class="fu">-</span><span class="dv">1</span>,tail nStart) best           mins  aMaxs
+	fBest _ (bLen,bStart) _ _ <span class="fu">=</span> take bLen bStart
+
+	<span class="kw">in</span> fBest (<span class="dv">0</span>,xs) (<span class="dv">0</span>,xs) pmaxs_cs smins_cs</code></pre>
+<p>Bonus k zamyšlení: má řešení O(1) prostorovou složitost? Pořadí vyhodnocování v Haskellu je líné (kousky hodnot se nevyhodnocují dokud nejsou potřeba) a paměť na kterou tranzitivně neodkazujeme se nepočítá (sežere ji GC).</p>
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="co">{-</span>
+<span class="co">import Data.Maybe (mapMaybe)</span>
+<span class="co">import System.Random (mkStdGen, randoms)</span>
+<span class="co">-- -}</span>
+test <span class="fu">=</span> mapMaybe mkMsg
+	[ ([<span class="fu">-</span><span class="dv">9</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>, <span class="dv">1</span>,<span class="fu">-</span><span class="dv">9</span>], [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>, <span class="dv">1</span>], <span class="st">&quot;one negative&quot;</span>)
+	, ([<span class="fu">-</span><span class="dv">9</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">9</span>], [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], <span class="st">&quot;all positive&quot;</span>)
+	, ([<span class="fu">-</span><span class="dv">9</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>,<span class="fu">-</span><span class="dv">9</span>], [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>], <span class="st">&quot;no zero sum&quot;</span>)
+	] <span class="kw">where</span>
+		mkMsg a<span class="fu">@</span>(inp,outp,msg)
+			<span class="fu">|</span> segment inp <span class="fu">==</span> outp <span class="fu">=</span> <span class="dt">Nothing</span>
+			<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Just</span> <span class="fu">$</span> show a <span class="fu">++</span> show (segment inp)
+
+<span class="ot">mkRL ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+mkRL len <span class="fu">=</span> take len <span class="fu">$</span> map ((<span class="fu">+</span> (<span class="fu">-</span><span class="dv">6</span>)) <span class="fu">.</span> (<span class="ot">`mod`</span> <span class="dv">10</span>)) <span class="fu">$</span> randoms (mkStdGen <span class="dv">1381256</span>)
+
+testR4 <span class="fu">=</span> segment (mkRL <span class="dv">1234</span>) <span class="fu">==</span>
+	[ <span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">1</span>,
+		<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">3</span> ]
+testR5 <span class="fu">=</span> segment (mkRL <span class="dv">12345</span>) <span class="fu">==</span>
+	[ <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">3</span>,
+		<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">3</span> ]
+testR6 <span class="fu">=</span> result <span class="fu">==</span> res1 <span class="fu">||</span> result <span class="fu">==</span> res2 <span class="kw">where</span>
+	result <span class="fu">=</span> segment (mkRL <span class="dv">123456</span>)
+	res1 <span class="fu">=</span> [ <span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,
+		<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span> ]
+	res2 <span class="fu">=</span> [ <span class="fu">-</span><span class="dv">5</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>,
+		<span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span> ]
+testR7 <span class="fu">=</span> result <span class="fu">==</span> res1 <span class="fu">||</span> result <span class="fu">==</span> res2 <span class="kw">where</span>
+	result <span class="fu">=</span> segment (mkRL <span class="dv">1234567</span>)
+	res1 <span class="fu">=</span> [ <span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,
+		<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">4</span>,
+		<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">0</span> ]
+	res2 <span class="fu">=</span> [ <span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,
+		<span class="dv">0</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="fu">-</span><span class="dv">4</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="fu">-</span><span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">1</span>,
+		<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="fu">-</span><span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="fu">-</span><span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="fu">-</span><span class="dv">2</span>,<span class="dv">0</span>,<span class="fu">-</span><span class="dv">6</span>,<span class="fu">-</span><span class="dv">3</span> ]</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May 12.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

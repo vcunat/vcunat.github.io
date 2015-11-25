@@ -1,0 +1,6 @@
+<area shape="rect" href="$structIStdEncPredictor.html" title="Interface for domain&#45;range mapping predictor generator for MStdEncoder." alt="" coords="272,277,392,307">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IStdEncPredictor \&gt;" alt="" coords="235,197,429,227">
+<area shape="rect" href="$classModule.html" title="A common base class for all modules." alt="" coords="231,5,295,35">
+<area shape="rect" href="$structModule_1_1SettingItem.html" title="Represents one setting value in a module." alt="" coords="9,101,196,131">
+<area shape="rect" href="$classInterface.html" title="A base class for all interfaces, parametrized by the interface&#39;s type." alt="" coords="220,101,345,131">
+<area shape="rect" href="$unionModule_1_1SettingValue.html" title="Represents one setting &#45; one number, real or integer." alt="" coords="5,5,200,35">

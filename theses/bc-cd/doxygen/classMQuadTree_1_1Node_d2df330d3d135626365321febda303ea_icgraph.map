@@ -1,0 +1,5 @@
+<area shape="rect" href="$classMQuadTree_1_1Node.html#a046416062f71ac7637da14c9f29c609" title="Divides the Range in four." alt="" coords="219,68,387,97">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#6433e85835df5916baebc4512266f3b1" title="Encodes a range block (recursively), returns whether it was divided." alt="" coords="437,29,613,59">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#156ffef90dc95699fb75dae781a12c9d" title="Loads sons from a stream (extremes contain the min. and max. block level)." alt="" coords="435,107,616,136">
+<area shape="rect" href="$classMQuadTree.html#ea32cd0135813676eacf7277f654593f" title="Starts encoding, calls modules in the passed structure." alt="" coords="708,29,847,59">
+<area shape="rect" href="$classMQuadTree.html#cbcecc3012fb86d1af965ee03581bf5d" title="Reads data from a stream and reconstructs the positions of range blocks." alt="" coords="664,107,891,136">

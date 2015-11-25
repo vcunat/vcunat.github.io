@@ -1,0 +1,5 @@
+<area shape="rect" href="$classMQuality2SE__alt.html" title="Alternate quality&#45;to&#45;SE module &#45; uses fixed MSE for all block sizes." alt="" coords="5,341,125,371">
+<area shape="rect" href="$classMQuality2SE__std.html" title="Standard quality&#45;to&#45;SE module &#45; uses fixed SE for all block sizes." alt="" coords="149,341,272,371">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IQuality2SE \&gt;" alt="" coords="55,181,220,211">
+<area shape="rect" href="$classModule.html" title="A common base class for all modules." alt="" coords="117,5,181,35">
+<area shape="rect" href="$classInterface.html" title="A base class for all interfaces, parametrized by the interface&#39;s type." alt="" coords="153,85,279,115">

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Seznam čísel</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Seznam čísel</h1> 
+<p>Definujte rostoucí seznam přirozených čísel která jsou ve tvaru <span class="math">2<sup><em>i</em></sup>3<sup><em>j</em></sup>5<sup><em>k</em></sup></span> pro libovolná přirozená <span class="math"><em>i</em>, <em>j</em>, <em>k</em></span> (včetně nul).</p>
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">cisla ::</span> [<span class="dt">Integer</span>]</code></pre>
+<p>Počet bodů je <span class="math">2.4</span>. Pokud se vám nelíbí generování nekonečného seznamu, omezená varianta je za 2 body.</p>
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell"><span class="ot">cislaDoHodnoty ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]</code></pre>
+<div id="složitost" class="section level4">
+<h4>Složitost</h4>
+<p>Pozor: pro plný počet bodů musí složitost vygenerování prvních <span class="math"><em>N</em></span> čísel být <span class="math"><em>O</em>(<em>N</em>)</span> (předpokládejte konstantní čas na základní aritmetické operace).</p>
+<p>Rozhodně se nesnažte způsobem <code class="sourceCode haskell">filter jeSpravne [<span class="dv">1</span><span class="fu">..</span>]</code> nebo cokoliv s asmyptoticky podobnou složitostí.</p>
+</div>
+<div id="příklady" class="section level4">
+<h4>Příklady:</h4>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"> <span class="fu">&gt;</span>	take <span class="dv">20</span> cisla <span class="co">-- nebo: cislaDoHodnoty 38</span>
+[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>,<span class="dv">12</span>,<span class="dv">15</span>,<span class="dv">16</span>,<span class="dv">18</span>,<span class="dv">20</span>,<span class="dv">24</span>,<span class="dv">25</span>,<span class="dv">27</span>,<span class="dv">30</span>,<span class="dv">32</span>,<span class="dv">36</span>]
+
+
+ <span class="fu">&gt;</span>	cisla <span class="fu">!!</span> <span class="dv">100000</span>
+<span class="dv">290237644800000000000000000000000000000</span></code></pre>
+</div>
+<div id="řešení" class="section level4">
+<h4>Řešení</h4>
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell">cisla <span class="fu">=</span> <span class="dv">1</span> <span class="fu">:</span> merge3 (map (<span class="dv">2</span><span class="fu">*</span>) cisla) (map (<span class="dv">3</span><span class="fu">*</span>) cisla) (map (<span class="dv">5</span><span class="fu">*</span>) cisla)
+
+<span class="co">-- | sleje tři neklesající posloupnosti a maže duplikáty</span>
+merge3 (a<span class="fu">:</span>as) (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+	<span class="fu">|</span> a<span class="fu">&lt;</span>b <span class="fu">&amp;&amp;</span> a<span class="fu">&lt;</span>c <span class="fu">=</span> a <span class="fu">:</span> merge3 as (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+	<span class="fu">|</span> b<span class="fu">&lt;</span>a <span class="fu">&amp;&amp;</span> b<span class="fu">&lt;</span>c <span class="fu">=</span> b <span class="fu">:</span> merge3 (a<span class="fu">:</span>as) bs (c<span class="fu">:</span>cs)
+	<span class="fu">|</span> c<span class="fu">&lt;</span>a <span class="fu">&amp;&amp;</span> c<span class="fu">&lt;</span>b <span class="fu">=</span> c <span class="fu">:</span> merge3 (a<span class="fu">:</span>as) (b<span class="fu">:</span>bs) cs
+	<span class="fu">|</span> a<span class="fu">==</span>b <span class="fu">||</span> a<span class="fu">==</span>c <span class="fu">=</span> merge3 as (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+	<span class="fu">|</span> b<span class="fu">==</span>c <span class="fu">=</span> merge3 (a<span class="fu">:</span>as) bs (c<span class="fu">:</span>cs)</code></pre>
+<p>Složitost: <em>sdílená</em> posloupnost <code>cisla</code> se líně generuje pomocí svého už vygenerovaného prefixu. Líné hodnoty se poprvé vyhodnotí až když jsou potřeba, ale nejvýše jednou (výsledek se zapamatuje). Každá hodnota do výsledku se vygeneruje nejvýše třikrát a pak projde mergem.</p>
+</div> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May 12.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

@@ -1,0 +1,4 @@
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__0.html" title="MatrixWalkers::Rotation_0\&lt; T,I \&gt;" alt="" coords="31,181,244,211">
+<area shape="rect" href="$structMatrixWalkers_1_1RotBase.html" title="MatrixWalkers::RotBase\&lt; T, I \&gt;" alt="" coords="35,5,240,35">
+<area shape="rect" href="$structMatrixWalkers_1_1HalfShrinker.html" title="MatrixWalkers::HalfShrinker\&lt; T, I \&gt;" alt="" coords="24,261,251,291">
+<area shape="rect" href="$structMatrixWalkers_1_1HalfShrinkerMul.html" title="Similar to HalfShrinker, but instead of multiplying the sums with 0.25 it uses an..." alt="" coords="5,341,269,371">

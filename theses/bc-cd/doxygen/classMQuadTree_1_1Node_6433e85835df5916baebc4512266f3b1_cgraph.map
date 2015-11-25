@@ -1,0 +1,6 @@
+<area shape="rect" href="$classMQuadTree_1_1Node.html#558d7bdfc0cde8f4db54c421034a907b" title="Only deletes the sons &#45; they do the same recursively." alt="" coords="229,5,429,35">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#a046416062f71ac7637da14c9f29c609" title="Divides the Range in four." alt="" coords="245,59,413,88">
+<area shape="rect" href="$classMQuadTree.html#1e1261c54585144c94a46f1550b73faf" title="MQuadTree::heuristicAllowed" alt="" coords="235,112,424,141">
+<area shape="rect" href="$classMQuadTree.html#c673d45de18dcb7f87622d7a3bcd5a30" title="MQuadTree::maxLevel" alt="" coords="253,165,405,195">
+<area shape="rect" href="$classMQuadTree.html#875ab643966a37c0f6b86346be51c93d" title="MQuadTree::minLevel" alt="" coords="256,219,403,248">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#d2df330d3d135626365321febda303ea" title="Pointer to the first son&#45;node of this node in the tree." alt="" coords="479,59,641,88">

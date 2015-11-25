@@ -1,0 +1,25 @@
+digraph G {
+	margin = 0;
+	ordering = out;
+
+	t1 [ label="t (b)" ];
+	w1 [ label="w (r)" ];
+	u1 [ label="u (r)" ];
+	s1 [ label="s (b)" ];
+	v1 [ label="v (r)" ];
+
+	t2 [ label=<t <b>(r)</b>> ];
+	w2 [ label=<w <b>(b)</b>> ];
+	u2 [ label=<u <b>(b)</b>> ];
+	s2 [ label="s (b)" ];
+	v2 [ label="v (r)" ];
+
+
+	t1 -> { w1; u1 };
+	u1 -> { s1; v1 };
+
+	t2 -> { w2; u2 };
+	u2 -> { s2; v2 };
+
+}
+

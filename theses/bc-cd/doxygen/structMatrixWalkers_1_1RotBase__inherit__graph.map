@@ -1,0 +1,8 @@
+<area shape="rect" href="$structMatrixWalkers_1_1RotBase.html" title="MatrixWalkers::RotBase\&lt; T,I \&gt;" alt="" coords="300,169,500,199">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__0.html" title="MatrixWalkers::Rotation_0\&lt; T, I \&gt;" alt="" coords="553,139,769,168">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__0.html" title="MatrixWalkers::Rotation_0\&lt; T,I \&gt;" alt="" coords="555,209,768,239">
+<area shape="rect" href="$structMatrixWalkers_1_1Checked.html" title="Checked_ iterator for a rectangle in a matrix, no rotation." alt="" coords="836,112,1041,141">
+<area shape="rect" href="$structMatrixWalkers_1_1DiamShrinker.html" title="Matrix iterator performing a shrink of a diamond (rotated sub&#45;square) into a square..." alt="" coords="823,165,1055,195">
+<area shape="rect" href="$structMatrixWalkers_1_1HalfShrinker.html" title="Matrix iterator performing a 2x2 to 1 shrink." alt="" coords="825,261,1052,291">
+<area shape="rect" href="$structMatrixWalkers_1_1HorizShrinker.html" title="Matrix iterator performing a 3x3 to 1x2 shrink." alt="" coords="823,5,1055,35">
+<area shape="rect" href="$structMatrixWalkers_1_1VertShrinker.html" title="Matrix iterator performing a 3x3 to 2x1 shrink." alt="" coords="825,59,1052,88">

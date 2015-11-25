@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - prohled</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% Najděte dvojici čísel, které jsou v dekadickém zápisu</span>
+<span class="co">% složeny pouze z jedniček a jejich součin a součet se rovnají</span>
+<span class="co">% A*B =:= A+B</span>
+
+reseni(<span class="dt">A</span><span class="kw">,</span><span class="dt">B</span>) <span class="kw">:-</span> reseni(<span class="dv">2</span><span class="kw">,</span> <span class="dt">A</span><span class="kw">,</span> <span class="dt">B</span>)<span class="kw">.</span>
+reseni(<span class="dt">N</span><span class="kw">,</span> <span class="dt">U</span><span class="kw">,</span> <span class="dt">V</span>) <span class="kw">:-</span> rozdel(<span class="dt">N</span><span class="kw">,</span> <span class="dt">U</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">,</span> test(<span class="dt">U</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">.</span>
+reseni(<span class="dt">N</span><span class="kw">,</span> <span class="dt">U</span><span class="kw">,</span> <span class="dt">V</span>) <span class="kw">:-</span> <span class="dt">M</span> <span class="dt">is</span> <span class="dt">N</span> <span class="dt">+</span> <span class="dv">1</span><span class="kw">,</span> reseni(<span class="dt">M</span><span class="kw">,</span> <span class="dt">U</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">.</span>
+
+test(cislo(<span class="dt">A</span><span class="kw">,</span><span class="dt">B</span>)<span class="kw">,</span> cislo(<span class="dt">C</span><span class="kw">,</span><span class="dt">D</span>)) <span class="kw">:-</span>
+	prevod(cislo(<span class="dt">A</span><span class="kw">,</span><span class="dt">B</span>)<span class="kw">,</span> <span class="dt">X</span>)<span class="kw">,</span> prevod(cislo(<span class="dt">C</span><span class="kw">,</span><span class="dt">D</span>)<span class="kw">,</span> <span class="dt">Y</span>)<span class="kw">,</span>
+	abs(<span class="dt">X</span><span class="fu">*</span><span class="dt">Y</span> <span class="fu">-</span> (<span class="dt">X</span><span class="fu">+</span><span class="dt">Y</span>)) <span class="dt">=:=</span> <span class="dv">0</span><span class="kw">.</span>
+
+<span class="co">%prevod(+cislo(DelkaPredTeckou, DelkaZaTeckou), -hodnota)</span>
+prevod(cislo(<span class="dt">A</span><span class="kw">,</span><span class="dt">B</span>)<span class="kw">,</span> <span class="dt">X</span>) <span class="kw">:-</span> leve(<span class="dt">A</span><span class="kw">,</span><span class="dt">X1</span>)<span class="kw">,</span> prave(<span class="dt">B</span><span class="kw">,</span><span class="dt">X2</span>)<span class="kw">,</span> <span class="dt">X</span> <span class="dt">is</span> <span class="dt">X1+X2</span><span class="kw">.</span>
+
+<span class="co">%leve(+PocetJednicek, -hodnota)</span>
+leve(<span class="dv">0</span><span class="kw">,</span> <span class="dv">0</span>)<span class="kw">.</span>
+<span class="co">%leve(1, 1).</span>
+leve(<span class="dt">N</span><span class="kw">,</span> <span class="dt">X</span>) <span class="kw">:-</span> <span class="dt">N</span> <span class="dt">&gt;</span> <span class="dv">0</span><span class="kw">,</span> <span class="dt">N1</span> <span class="dt">is</span> <span class="dt">N</span><span class="dv">-1</span><span class="kw">,</span> leve(<span class="dt">N1</span><span class="kw">,</span> <span class="dt">X1</span>)<span class="kw">,</span> <span class="dt">X</span> <span class="dt">is</span> <span class="dt">X1*</span><span class="dv">10+1</span><span class="kw">.</span>
+
+<span class="co">%prave(+PocetJednicekZa, -hodnota)</span>
+prave(<span class="dv">0</span><span class="kw">,</span> <span class="dv">0</span>)<span class="kw">.</span>
+prave(<span class="dt">N</span><span class="kw">,</span> <span class="dt">X</span>) <span class="kw">:-</span>
+	<span class="dt">N</span> <span class="dt">&gt;</span> <span class="dv">0</span><span class="kw">,</span> <span class="dt">N1</span> <span class="dt">is</span> <span class="dt">N</span><span class="dv">-1</span><span class="kw">,</span> prave(<span class="dt">N1</span><span class="kw">,</span><span class="dt">X1</span>)<span class="kw">,</span>
+	<span class="dt">X</span> <span class="dt">is</span> (<span class="dt">X1</span> <span class="dt">+</span> <span class="dv">1</span>) rdiv <span class="dv">10</span><span class="kw">.</span>
+	<span class="co">% ^^ nakonec jsme použili nestandardní aritmetiku:</span>
+	<span class="co">% racionální čísla s neomezenou přesností</span>
+
+<span class="co">%rozdel(+CelkovyPocetJednicek, -Cislo1, -Cislo2)</span>
+rozdel(<span class="dt">N</span><span class="kw">,</span> <span class="dt">C1</span><span class="kw">,</span> <span class="dt">C2</span>) <span class="kw">:-</span>
+	<span class="dt">N</span> <span class="dt">&gt;=</span> <span class="dv">2</span><span class="kw">,</span> rozdelCislo(<span class="dt">N</span><span class="kw">,</span> <span class="dt">N1</span><span class="kw">,</span> <span class="dt">N2</span>)<span class="kw">,</span>
+	carka(<span class="dt">N1</span><span class="kw">,</span> <span class="dt">C1</span>)<span class="kw">,</span> carka(<span class="dt">N2</span><span class="kw">,</span> <span class="dt">C2</span>)<span class="kw">.</span>
+
+<span class="co">%carka(+PocetJednicek, Cislo)</span>
+carka(<span class="dt">N</span><span class="kw">,</span> cislo(<span class="dt">Cela</span><span class="kw">,</span> <span class="dt">Desetinna</span>)) <span class="kw">:-</span>
+	<span class="dt">N</span> <span class="dt">&gt;</span> <span class="dv">0</span><span class="kw">,</span> rozdelCislo(<span class="dt">N</span><span class="kw">,</span> <span class="dt">Cela</span><span class="kw">,</span> <span class="dt">Desetinna</span>)<span class="kw">.</span>
+
+<span class="co">%rozdelCislo(Soucet, A, B)</span>
+rozdelCislo(<span class="dt">N</span><span class="kw">,</span> <span class="dt">A</span><span class="kw">,</span> <span class="dt">B</span>) <span class="kw">:-</span> seq(<span class="dt">N</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span> <span class="dt">B</span> <span class="dt">is</span> <span class="dt">N</span> <span class="dt">-</span> <span class="dt">A</span><span class="kw">.</span>
+
+<span class="co">%seq(+End, -Current)</span>
+seq(<span class="dt">End</span><span class="kw">,</span> <span class="dt">Current</span>) <span class="kw">:-</span> range(<span class="dt">End</span><span class="kw">,</span> <span class="dt">RNG</span>)<span class="kw">,</span> member(<span class="dt">Current</span><span class="kw">,</span> <span class="dt">RNG</span>)<span class="kw">.</span>
+
+<span class="co">%range(+Count, -RangeList)</span>
+range(<span class="dv">0</span><span class="kw">,</span> [<span class="dv">0</span>])<span class="kw">:-!.</span>
+range(<span class="dt">N</span><span class="kw">,</span> [<span class="dt">N</span><span class="fu">|</span><span class="dt">Z</span>]) <span class="kw">:-</span> decrement(<span class="dt">N</span><span class="kw">,</span> <span class="dt">M</span>)<span class="kw">,</span> range(<span class="dt">M</span><span class="kw">,</span> <span class="dt">Z</span>)<span class="kw">.</span>
+
+<span class="co">%decrement(+In, -Out)</span>
+decrement(<span class="dt">N</span><span class="kw">,</span> <span class="dt">M</span>) <span class="kw">:-</span> <span class="dt">M</span> <span class="dt">is</span> <span class="dt">N</span> <span class="dt">-</span> <span class="dv">1</span><span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog"></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April  8.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

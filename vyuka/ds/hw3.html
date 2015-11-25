@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+	<meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+	<title>Data Structures 1 - 2014/2015</title>
+	<!--[if gte mso 9]><xml>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]-->
+	<style type="text/css">
+	<!--
+		@page { size: 8.5in 11in }
+		P { color: #000000 }
+		H1 { color: #000000 }
+		H2 { color: #000000 }
+		H2.western { font-family: "Albany", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
+		H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
+	-->
+	</style>
+</head>
+<body dir="LTR" lang="en-US" text="#000000">
+Data Structures 1 - NTIN066 - WS 2014/2015
+<h2>HW 3</h2>
+
+
+<b>Due date:</b> 15. 12. 2014<p>
+
+<h3>Problem description</h3>
+Implement lazy binomial heaps. Create a program which reads the test data from the standard input and with each Delete-Min operation it outputs the deleted minimum.
+The input data are partitioned into runs. Each run constists of a sequence of Insert and Delete-Min operations. The Insert operation starts by the character 'I' in the input. The Delete-Min operation starts with 'D'. The last row of the run is the character 'R'. After each run (at the end of the input) there is a row with the character 'X'.
+The inserted elements are from the interval [0, n - 1]. After each run the binomial heap is emptied. Each run should be saparated by a newline in the output.
+
+<p>
+Using unix executable <tt>/afs/ms.mff.cuni.cz/u/k/koucky/ds1/pbl3-gen-data</tt> which is available in Rotunda laboratory you can generate test data. 
+
+Test your implementation using those data and for each run measure the overall number of merges during Delete-Min operation. Then measure the count N of Insert operations and the number D of Delete-Min operations.
+
+Create a graph (each run is a point): 
+<ul>
+	<li>The <i>x</i> axis is N - the number of insertions.</li>
+    <li>The axis <i>y</i> shows (S-min(S,N))/D.</li>
+</ul>
+That is create a graph of the average number of merges per deletion.
+The graph should have five curves for five test data.
+Also try to explain the graph.
+
+</p><h3>Input example</h3>
+<pre>
+I 1 
+I 3
+D
+I 2
+D
+I 0
+R
+I 2
+I 3
+I 0
+I 1
+D
+R
+X
+</pre>
+
+<h3>Output</h3>
+<pre>
+1
+2
+
+0
+</pre>
+
+<h3>A possible graph</h3>
+
+<img src="http://iuuk.mff.cuni.cz/~koucky/vyuka/DS1-ZS2014/pblm3-graf.png" width=500>
+
+<h3>Generating the input data</h3>
+<tt>$/afs/ms.mff.cuni.cz/u/k/koucky/ds1/pbl3-gen-data XX D</tt>
+<p>This will generate data for measuring, remember that XX are the last two number of your student number and D is one of  {0,1000,10000,100000,1000000} (the five curves).
+If D=0, then we perform Delete-Min just after all insertions until the heap is emptied.
+When D&lt;0, then Delete-Min operations are uniformly positioned among N Insert operations.
+Each run has at least 1 000 inserts and runs up to 1 000 000 insertions. There are approximately 300 runs.
+Example:
+
+<pre>
+pbl3-gen-data 72 0       | my-heap
+pbl3-gen-data 72 1000    | my-heap
+pbl3-gen-data 72 10000   | my-heap
+pbl3-gen-data 72 100000  | my-heap
+pbl3-gen-data 72 1000000 | my-heap
+</pre>
+
+
+
+</p></body></html>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - rodina</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="co">% rodice(Otec, Matka, Dite)</span>
+
+rodice(jiri<span class="kw">,</span> marie<span class="kw">,</span> jan)<span class="kw">.</span>
+rodice(jiri<span class="kw">,</span> marie<span class="kw">,</span> tomas)<span class="kw">.</span>
+rodice(jiri<span class="kw">,</span> marie<span class="kw">,</span> eva)<span class="kw">.</span>
+
+rodice(michal<span class="kw">,</span> vera<span class="kw">,</span> pavel)<span class="kw">.</span>
+rodice(michal<span class="kw">,</span> vera<span class="kw">,</span> hana)<span class="kw">.</span>
+
+rodice(jan<span class="kw">,</span> alena<span class="kw">,</span> karel)<span class="kw">.</span>
+rodice(pavel<span class="kw">,</span> eva<span class="kw">,</span> jana)<span class="kw">.</span>
+
+
+<span class="co">% z databaze: kazda matka je zena</span>
+zena(<span class="dt">X</span>)<span class="kw">:-</span> todo<span class="kw">.</span>
+
+<span class="co">% dospecifikujeme pro ostatni</span>
+zena(eva)<span class="kw">.</span>
+zena(hana)<span class="kw">.</span>
+zena(jana)<span class="kw">.</span>
+
+
+<span class="co">% S je sestra od X</span>
+sestra(<span class="dt">S</span><span class="kw">,</span> <span class="dt">X</span>) <span class="kw">:-</span> todo<span class="kw">.</span>
+
+
+<span class="co">% R je rodic od D</span>
+rodic(<span class="dt">R</span><span class="kw">,</span> <span class="dt">D</span>) <span class="kw">:-</span> todo<span class="kw">.</span>
+
+
+<span class="co">% P je prarodic od V</span>
+prarodic(<span class="dt">P</span><span class="kw">,</span> <span class="dt">V</span>) <span class="kw">:-</span> todo<span class="kw">.</span>
+
+
+<span class="co">% P je libovne vzdaleny potomek X</span>
+potomek(<span class="dt">P</span><span class="kw">,</span> <span class="dt">X</span>) <span class="kw">:-</span> todo<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span> zena(<span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> vera <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> vera <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> alena <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> eva <span class="kw">.</span>
+<span class="co">% nektere vysledky lze odvodit vice zpusoby</span>
+
+
+<span class="fu">?-</span> sestra(<span class="dt">S</span><span class="kw">,</span>pavel)<span class="kw">.</span>
+<span class="dt">S</span> <span class="kw">=</span> hana <span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> potomek(<span class="dt">X</span><span class="kw">,</span><span class="dt">Y</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> jan<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> tomas<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> eva<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> pavel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> vera <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> hana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> vera <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> karel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> alena <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> eva <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jan<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jiri <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> tomas<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jiri <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> eva<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jiri <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> pavel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> michal <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> hana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> michal <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> karel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jan <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> pavel <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jiri <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> karel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> marie <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> karel<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> jiri <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> vera <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> jana<span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> michal <span class="kw">;</span>
+<span class="kw">false.</span></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, February 18.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

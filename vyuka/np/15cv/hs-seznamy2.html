@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Práce se seznamy (pokračování)</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Práce se seznamy (pokračování)</h1> 
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell">
+
+<span class="co">-- skytí knihovních funkcí které napíšeme</span>
+<span class="kw">import </span><span class="dt">Prelude</span> <span class="kw">hiding</span>
+   (unzip, zipWith, splitAt, elem, break)
+
+
+<span class="co">-- ilustrace použití let a where</span>
+cislo k <span class="fu">=</span>
+    <span class="kw">let</span> cisla <span class="fu">=</span> <span class="dv">1</span> <span class="fu">:</span> merge3 (map (<span class="dv">2</span><span class="fu">*</span>) cisla) (map (<span class="dv">3</span><span class="fu">*</span>) cisla) (map (<span class="dv">5</span><span class="fu">*</span>) cisla)
+    <span class="kw">in</span> cisla <span class="fu">!!</span> k
+
+cislo' k <span class="fu">=</span> cisla <span class="fu">!!</span> k <span class="kw">where</span>
+    cisla <span class="fu">=</span> <span class="dv">1</span> <span class="fu">:</span> merge3 (map (<span class="dv">2</span><span class="fu">*</span>) cisla) (map (<span class="dv">3</span><span class="fu">*</span>) cisla) (map (<span class="dv">5</span><span class="fu">*</span>) cisla)
+
+<span class="co">-- | sleje tři neklesající posloupnosti a maže duplikáty</span>
+merge3 (a<span class="fu">:</span>as) (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+    <span class="fu">|</span> a<span class="fu">&lt;</span>b <span class="fu">&amp;&amp;</span> a<span class="fu">&lt;</span>c <span class="fu">=</span> a <span class="fu">:</span> merge3 as (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+    <span class="fu">|</span> b<span class="fu">&lt;</span>a <span class="fu">&amp;&amp;</span> b<span class="fu">&lt;</span>c <span class="fu">=</span> b <span class="fu">:</span> merge3 (a<span class="fu">:</span>as) bs (c<span class="fu">:</span>cs)
+    <span class="fu">|</span> c<span class="fu">&lt;</span>a <span class="fu">&amp;&amp;</span> c<span class="fu">&lt;</span>b <span class="fu">=</span> c <span class="fu">:</span> merge3 (a<span class="fu">:</span>as) (b<span class="fu">:</span>bs) cs
+    <span class="fu">|</span> a<span class="fu">==</span>b <span class="fu">||</span> a<span class="fu">==</span>c <span class="fu">=</span> merge3 as (b<span class="fu">:</span>bs) (c<span class="fu">:</span>cs)
+    <span class="fu">|</span> b<span class="fu">==</span>c <span class="fu">=</span> merge3 (a<span class="fu">:</span>as) bs (c<span class="fu">:</span>cs)
+
+
+
+
+unzip<span class="ot"> ::</span> [(a, b)] <span class="ot">-&gt;</span> ([a], [b])
+unzip [] <span class="fu">=</span> ([],[])
+unzip ((x,y)<span class="fu">:</span>z) <span class="fu">=</span> (x<span class="fu">:</span>a, y<span class="fu">:</span>b) <span class="kw">where</span> (a,b) <span class="fu">=</span> unzip z
+
+
+zipWith<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b] <span class="ot">-&gt;</span> [c]
+zipWith _ [] _ <span class="fu">=</span> []
+zipWith _ _ [] <span class="fu">=</span> []
+zipWith f (x<span class="fu">:</span>xs) (y<span class="fu">:</span>ys) <span class="fu">=</span> (f x y) <span class="fu">:</span> zipWith f xs ys
+
+zvětšuj <span class="fu">=</span> zipWith (<span class="fu">+</span>) [<span class="dv">1</span><span class="fu">..</span>]
+
+splitAt<span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> ([a], [a])
+splitAt <span class="dv">0</span> xs <span class="fu">=</span> ([], xs)
+splitAt _ [] <span class="fu">=</span> ([], [])
+splitAt p (x<span class="fu">:</span>xs) <span class="fu">=</span> <span class="kw">if</span> p<span class="fu">&gt;</span><span class="dv">0</span> <span class="kw">then</span> <span class="kw">let</span> (ys,zs) <span class="fu">=</span> splitAt (p<span class="fu">-</span><span class="dv">1</span>) xs <span class="kw">in</span> (x<span class="fu">:</span>ys, zs)
+                              <span class="kw">else</span> error <span class="st">&quot;Negative index&quot;</span>
+
+
+elem<span class="ot"> ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+elem a [] <span class="fu">=</span> <span class="dt">False</span>
+elem a (x<span class="fu">:</span>xs) <span class="fu">=</span> a <span class="fu">==</span> x <span class="fu">||</span> elem a xs
+
+<span class="co">-- rozdělení seznamu na pozici kde poprvé uspěje predikát</span>
+break<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> ([a], [a])
+break _ [] <span class="fu">=</span> ([], [])
+break f (a<span class="fu">:</span>as)
+    <span class="fu">|</span> f a <span class="fu">=</span> ([], (a<span class="fu">:</span>as))
+    <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">let</span> (b,c) <span class="fu">=</span> break f as <span class="kw">in</span> (a<span class="fu">:</span>b, c)
+
+
+<span class="co">-- funkce níže nejsou z Prelude ale z Data.List</span>
+
+<span class="co">-- funkce s trochu zvláštním významem, asi nejlépe vysvětlena kódem</span>
+<span class="ot">union ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+union uPS hOPS
+    <span class="fu">=</span> uPS <span class="fu">++</span> filter (not <span class="fu">.</span> (<span class="ot">`elem`</span> uPS)) hOPS
+
+    <span class="co">-- = uPS ++ filter (\x -&gt; not  (x `elem` uPS)) hOPS</span>
+
+
+<span class="co">-- rozdělení prvků podle toho zda splňují predikát</span>
+<span class="ot">partition ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> ([a], [a])
+partition _ [] <span class="fu">=</span> ([], [])
+partition f (h<span class="fu">:</span>t) <span class="fu">=</span> <span class="kw">if</span> f h <span class="kw">then</span> (h<span class="fu">:</span>(fst list), (snd list))
+                           <span class="kw">else</span> ((fst list), h<span class="fu">:</span>(snd list))
+                           <span class="kw">where</span> list <span class="fu">=</span> partition f t
+
+
+<span class="ot">findIndices ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+findIndices <span class="fu">=</span> findIndices' <span class="dv">0</span>
+
+findIndices' _ _ [] <span class="fu">=</span> []
+findIndices' a f (h<span class="fu">:</span>t) <span class="fu">=</span> (<span class="kw">if</span> f h <span class="kw">then</span> [a] <span class="kw">else</span> []) <span class="fu">++</span> findIndices' (a<span class="fu">+</span><span class="dv">1</span>) f t</code></pre>
+<!--
+Do with folds & scans
+
+concatMap :: (a -> [b]) -> [a] -> [b]
+concatMap = undefined
+
+(un)words/lines
+--> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May  1.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

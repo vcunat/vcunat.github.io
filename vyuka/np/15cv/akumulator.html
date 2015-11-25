@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - akumulator</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% na přednášce: otočení seznamu v lineárním čase, apod.</span>
+
+<span class="co">% max(+Seznam, -MaxPrvek)</span>
+max1([<span class="dt">M</span>]<span class="kw">,</span> <span class="dt">M</span>)<span class="kw">.</span>
+max1([<span class="dt">S1</span><span class="fu">|</span><span class="dt">Sz</span>]<span class="kw">,</span> <span class="dt">M</span>) <span class="kw">:-</span> max1(<span class="dt">Sz</span><span class="kw">,</span> <span class="dt">Mz</span>)<span class="kw">,</span> <span class="dt">M</span> <span class="dt">is</span> <span class="dt">max</span>(<span class="dt">S1</span><span class="er">,</span><span class="dt">Mz</span>)<span class="kw">.</span>
+<span class="co">% max1 není koncově rekurzivní (tail-recursive),</span>
+<span class="co">% 	pomožme hloupému interpreteru s optimalizací</span>
+
+max2([<span class="dt">X</span><span class="fu">|</span><span class="dt">Xs</span>]<span class="kw">,</span> <span class="dt">M</span>) <span class="kw">:-</span> max2(<span class="dt">Xs</span><span class="kw">,</span> <span class="dt">X</span><span class="kw">,</span> <span class="dt">M</span>)<span class="kw">.</span>
+max2([]<span class="kw">,</span> <span class="dt">M</span><span class="kw">,</span> <span class="dt">M</span>)<span class="kw">.</span>
+max2([<span class="dt">X</span><span class="fu">|</span><span class="dt">Xs</span>]<span class="kw">,</span> <span class="dt">SoFar</span><span class="kw">,</span> <span class="dt">M</span>) <span class="kw">:-</span> <span class="dt">M0</span> <span class="dt">is</span> <span class="dt">max</span>(<span class="dt">X</span><span class="er">,</span> <span class="dt">SoFar</span>)<span class="kw">,</span> max2(<span class="dt">Xs</span><span class="kw">,</span> <span class="dt">M0</span><span class="kw">,</span> <span class="dt">M</span>)<span class="kw">.</span>
+
+
+<span class="co">% strom2sez(+Strom, -SeznamKlicu)</span>
+<span class="co">% 	list nebo uzel(L, K, P)</span>
+<span class="co">% 	tentokrát chceme v lineárním čase</span>
+
+strom2sez(<span class="dt">T</span><span class="kw">,</span> <span class="dt">L</span>) <span class="kw">:-</span> strom2sez(<span class="dt">T</span><span class="kw">,</span> <span class="dt">L</span><span class="kw">,</span> [])<span class="kw">.</span>
+<span class="co">% strom2sez(+Strom, -SeznamKlíčů_spojený_s_Append, +Append)</span>
+strom2sez(list<span class="kw">,</span> <span class="dt">S</span><span class="kw">,</span> <span class="dt">S</span>)<span class="kw">.</span>
+strom2sez(uzel(<span class="dt">L</span><span class="kw">,</span> <span class="dt">K</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">,</span> <span class="dt">S</span><span class="kw">,</span> <span class="dt">A</span>) <span class="kw">:-</span>
+	strom2sez(<span class="dt">R</span><span class="kw">,</span> <span class="dt">RS</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span> strom2sez(<span class="dt">L</span><span class="kw">,</span> <span class="dt">S</span><span class="kw">,</span> [<span class="dt">K</span><span class="fu">|</span><span class="dt">RS</span>])<span class="kw">.</span>
+
+
+<span class="co">% zplošťování seznamu v lineárním čase</span>
+<span class="co">% zplosti(+Seznam, -Zploštěný)</span>
+<span class="co">% ?- zplosti([a,2,[3,[4,c],a],1,[],2], S).</span>
+<span class="co">% S = [a, 2, 3, 4, c, a, 1, 2] .</span>
+zplosti([]<span class="kw">,</span>[])<span class="kw">.</span>
+zplosti([<span class="dt">A</span><span class="fu">|</span><span class="dt">B</span>]<span class="kw">,</span><span class="dt">S</span>)<span class="kw">:-</span> ( <span class="dt">A</span> <span class="kw">=</span> [] <span class="kw">;</span> <span class="dt">A</span> <span class="kw">=</span> [<span class="dt">_</span><span class="fu">|</span><span class="dt">_</span>] )<span class="kw">,</span>
+	zplosti(<span class="dt">A</span><span class="kw">,</span><span class="dt">U</span>)<span class="kw">,</span>zplosti(<span class="dt">B</span><span class="kw">,</span><span class="dt">V</span>)<span class="kw">,</span>append(<span class="dt">U</span><span class="kw">,</span><span class="dt">V</span><span class="kw">,</span><span class="dt">S</span>)<span class="kw">.</span>
+zplosti([<span class="dt">A</span><span class="fu">|</span><span class="dt">B</span>]<span class="kw">,</span>[<span class="dt">A</span><span class="fu">|</span><span class="dt">V</span>])<span class="kw">:-</span> ( <span class="dt">A</span> <span class="kw">\=</span> [] <span class="kw">,</span> <span class="dt">A</span> <span class="kw">\=</span> [<span class="dt">_</span><span class="fu">|</span><span class="dt">_</span>] )<span class="kw">,</span>
+	zplosti(<span class="dt">B</span><span class="kw">,</span><span class="dt">V</span>)<span class="kw">.</span>
+
+<span class="co">% zplosti(+Seznam, -Zploštěný_spojený_s_Append, +Append)</span>
+zplosti2(<span class="dt">S</span><span class="kw">,</span> <span class="dt">F</span>) <span class="kw">:-</span> zplosti2(<span class="dt">S</span><span class="kw">,</span> <span class="dt">F</span><span class="kw">,</span> [])<span class="kw">.</span>
+zplosti2([]<span class="kw">,</span> <span class="dt">A</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">.</span>
+<span class="co">%zplosti2([H|T], F, A) :- ((H = [] ; H = [_|_]),</span>
+<span class="co">%	zplosti2(H, F, EH), ! ;F=[H|EH]),</span>
+<span class="co">%	zplosti2(T, EH, A).</span>
+<span class="co">% zase můžeme prohodit oba kroky</span>
+zplosti2([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> <span class="dt">F</span><span class="kw">,</span> <span class="dt">A</span>) <span class="kw">:-</span> zplosti2(<span class="dt">T</span><span class="kw">,</span> <span class="dt">EH</span><span class="kw">,</span> <span class="dt">A</span>)<span class="kw">,</span>
+	((<span class="dt">H</span> <span class="kw">=</span> [] <span class="kw">;</span> <span class="dt">H</span> <span class="kw">=</span> [<span class="dt">_</span><span class="fu">|</span><span class="dt">_</span>])<span class="kw">,</span> zplosti2(<span class="dt">H</span><span class="kw">,</span> <span class="dt">F</span><span class="kw">,</span> <span class="dt">EH</span>)<span class="kw">,</span> <span class="kw">!</span> <span class="kw">;</span> <span class="dt">F</span><span class="kw">=</span>[<span class="dt">H</span><span class="fu">|</span><span class="dt">EH</span>])<span class="kw">.</span>
+
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog"></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, March 12.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - du-most</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">/*</span>
+<span class="co">  Řešte následující (zobecněnou) hádanku.</span>
+<span class="co">  Skupina osob potřebuje překonat most.</span>
+<span class="co">  Ten ale unese nejvýše dvě osoby najednou.</span>
+<span class="co">  Navíc je tma, takže je potřeba překračovat se světlem,</span>
+<span class="co">  které je jen jedno a už moc dlouho nevydrží svítit.</span>
+<span class="co">  (Tedy pravidla podobná překonávání řeky v loďce.)</span>
+
+<span class="co">  Různým osobám trvá přechod různě dlouho</span>
+<span class="co">  a dvojice musí jít rychlostí toho pomalejšího.</span>
+
+<span class="co">  Vstup: seznam osob, kde každá je pro zjednodušení</span>
+<span class="co">  reprezentována pouze číslem - svou dobou přechodu mostu.</span>
+<span class="co">  Výstup - řešení: seznam kroků, kde krok je prostý seznam</span>
+<span class="co">  osob překračujících most (směr se stejně musí střídat).</span>
+
+<span class="co">  Bodování:</span>
+<span class="co">     (rychlost zkouším na prvních dvou příkladech níže)</span>
+<span class="co">   - max. 2.4 za nalezení všech řešení ve zlomku vteřiny,</span>
+<span class="co">   - 2 body pokud to bude pomalejší (max. desítky vteřin),</span>
+<span class="co">   - 1.5 bodu za nevracení nekorektních řešení</span>
+<span class="co">     a nalezení nějakého do 1-2 minut (nebo false).</span>
+
+<span class="co">  Rozumnou funkčnost budu zkoušet i na jiných vstupech</span>
+<span class="co">  než těch co jsou uvedené v době zadání ;-)</span>
+<span class="co">*/</span>
+
+<span class="co">% most(+SeznamČasůNaPřekročení, +ČasovýLimit, -NějakéŘešení)</span>
+
+
+
+<span class="co">% krok(+StavPřed, -SeznamKdoPřejde, -ČasKroku, -StavPo)</span>
+krok(s(<span class="dt">Strana0</span><span class="kw">,</span><span class="dt">Leva0</span><span class="kw">,</span><span class="dt">Prava0</span>)<span class="kw">,</span> <span class="dt">Kdo</span><span class="kw">,</span> <span class="dt">Cas</span><span class="kw">,</span> s(<span class="dt">Strana</span><span class="kw">,</span><span class="dt">Leva</span><span class="kw">,</span><span class="dt">Prava</span>))
+<span class="kw">:-</span>
+	<span class="co">% Nejprve symetrie: Leva*, Prava* =&gt; Prvni*, Druha*</span>
+	( <span class="dt">Strana0</span><span class="kw">=</span>leva<span class="kw">,</span> <span class="dt">Strana</span><span class="kw">=</span>prava<span class="kw">,</span>
+		<span class="dt">Prvni0</span><span class="kw">=</span><span class="dt">Leva0</span><span class="kw">,</span> <span class="dt">Prvni</span><span class="kw">=</span><span class="dt">Leva</span><span class="kw">,</span> <span class="dt">Druha0</span><span class="kw">=</span><span class="dt">Prava0</span><span class="kw">,</span> <span class="dt">Druha</span><span class="kw">=</span><span class="dt">Prava</span>
+	<span class="kw">;</span> <span class="dt">Strana0</span><span class="kw">=</span>prava<span class="kw">,</span> <span class="dt">Strana</span><span class="kw">=</span>leva<span class="kw">,</span>
+		<span class="dt">Prvni0</span><span class="kw">=</span><span class="dt">Prava0</span><span class="kw">,</span> <span class="dt">Prvni</span><span class="kw">=</span><span class="dt">Prava</span><span class="kw">,</span> <span class="dt">Druha0</span><span class="kw">=</span><span class="dt">Leva0</span><span class="kw">,</span> <span class="dt">Druha</span><span class="kw">=</span><span class="dt">Leva</span>
+	)<span class="kw">,</span>
+	
+	<span class="co">% Vybereme kdo přejde: Kdo1 a případně i Kdo2</span>
+	select(<span class="dt">Kdo1</span><span class="kw">,</span> <span class="dt">Prvni0</span><span class="kw">,</span> <span class="dt">Prvni0_bez1</span>)<span class="kw">,</span>
+	( <span class="dt">Kdo</span> <span class="kw">=</span> [<span class="dt">Kdo1</span>, <span class="dt">Kdo2</span>]<span class="kw">,</span>
+		select(<span class="dt">Kdo2</span><span class="kw">,</span> <span class="dt">Prvni0_bez1</span><span class="kw">,</span> <span class="dt">Prvni</span>)<span class="kw">,</span>
+		<span class="dt">Kdo2</span> <span class="dt">&gt;=</span> <span class="dt">Kdo1</span><span class="kw">,</span>
+		<span class="dt">Cas</span> <span class="dt">is</span> <span class="dt">max</span>(<span class="dt">Kdo1</span><span class="er">,</span><span class="dt">Kdo2</span>)
+	<span class="kw">;</span> <span class="dt">Kdo</span> <span class="kw">=</span> [<span class="dt">Kdo1</span>]<span class="kw">,</span>
+		<span class="dt">Prvni</span> <span class="kw">=</span> <span class="dt">Prvni0_bez1</span><span class="kw">,</span>
+		<span class="dt">Cas</span> <span class="dt">is</span> <span class="dt">Kdo1</span>
+	)<span class="kw">,</span>
+	append(<span class="dt">Kdo</span><span class="kw">,</span> <span class="dt">Druha0</span><span class="kw">,</span> <span class="dt">Druha</span>)<span class="kw">.</span>
+
+<span class="co">% Převážejme zleva doprava:</span>
+<span class="co">%   na začátku všichni vlevo, na konci nikdo vlevo.</span>
+most(<span class="dt">Leva</span><span class="kw">,</span> <span class="dt">Limit</span><span class="kw">,</span> <span class="dt">Kroky</span>) <span class="kw">:-</span>
+	hledej(s(leva<span class="kw">,</span><span class="dt">Leva</span><span class="kw">,</span>[])<span class="kw">,</span> <span class="dt">Limit</span><span class="kw">,</span> <span class="dt">Kroky</span>)<span class="kw">.</span>
+
+hledej(s(<span class="dt">_</span><span class="kw">,</span>[]<span class="kw">,</span><span class="dt">_</span>)<span class="kw">,</span> <span class="dt">Limit</span><span class="kw">,</span> []) <span class="kw">:-</span> <span class="dt">Limit</span> <span class="dt">&gt;=</span> <span class="dv">0</span><span class="kw">.</span>
+
+hledej(<span class="dt">Stav</span><span class="kw">,</span> <span class="dt">Limit</span><span class="kw">,</span> <span class="dt">Kroky</span>) <span class="kw">:-</span>
+	krok(<span class="dt">Stav</span><span class="kw">,</span> <span class="dt">Kdo</span><span class="kw">,</span> <span class="dt">Cas</span><span class="kw">,</span> <span class="dt">Stav2</span>)<span class="kw">,</span>
+	<span class="dt">Limit2</span> <span class="dt">is</span> <span class="dt">Limit-Cas</span><span class="kw">,</span> <span class="dt">Limit2</span> <span class="dt">&gt;=</span> <span class="dv">0</span><span class="kw">,</span>
+	<span class="dt">Kroky</span> <span class="kw">=</span> [<span class="dt">Kdo</span><span class="fu">|</span><span class="dt">DalsiKroky</span>]<span class="kw">,</span>
+	hledej(<span class="dt">Stav2</span><span class="kw">,</span> <span class="dt">Limit2</span><span class="kw">,</span> <span class="dt">DalsiKroky</span>)<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% Vstup z flashové hry na http://plastelina.net/game3.html</span>
+
+<span class="fu">?-</span> most([<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">12</span>]<span class="kw">,</span> <span class="dv">28</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> most([<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">12</span>]<span class="kw">,</span> <span class="dv">30</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">.</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">6</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">3</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">1</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">3</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">3</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">6</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">1</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">3</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">1</span>, <span class="dv">6</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>], [<span class="dv">3</span>], [<span class="dv">8</span>, <span class="dv">12</span>], [<span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">3</span>]] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+
+<span class="fu">?-</span> most([<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">25</span>]<span class="kw">,</span> <span class="dv">59</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> most([<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">25</span>]<span class="kw">,</span> <span class="dv">60</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">.</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">5</span>, <span class="dv">10</span>], [<span class="dv">5</span>], [<span class="dv">20</span>, <span class="dv">25</span>], [<span class="dv">10</span>], [<span class="dv">5</span>, <span class="dv">10</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">5</span>, <span class="dv">10</span>], [<span class="dv">10</span>], [<span class="dv">20</span>, <span class="dv">25</span>], [<span class="dv">5</span>], [<span class="dv">5</span>, <span class="dv">10</span>]] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> most([<span class="dv">2</span>]<span class="kw">,</span> <span class="dv">10</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">.</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">2</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">2</span>], [<span class="dv">2</span>], [<span class="dv">2</span>]] <span class="kw">;</span>
+<span class="dt">R</span> <span class="kw">=</span> [[<span class="dv">2</span>], [<span class="dv">2</span>], [<span class="dv">2</span>], [<span class="dv">2</span>], [<span class="dv">2</span>]] <span class="kw">;</span>
+<span class="kw">false.</span>
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April 20.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

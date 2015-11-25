@@ -1,0 +1,8 @@
+<area shape="rect" href="$classMQuadTree_1_1Node.html#6433e85835df5916baebc4512266f3b1" title="Encodes a range block (recursively), returns whether it was divided." alt="" coords="209,112,385,141">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#8acf70a78a64d4c57d09877e93cfb700" title="Recursively walks the Ranges in the QuadTree according to a Hilbert curve and fills..." alt="" coords="192,165,403,195">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#558d7bdfc0cde8f4db54c421034a907b" title="Only deletes the sons &#45; they do the same recursively." alt="" coords="451,5,651,35">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#a046416062f71ac7637da14c9f29c609" title="Divides the Range in four." alt="" coords="467,59,635,88">
+<area shape="rect" href="$classMQuadTree.html#1e1261c54585144c94a46f1550b73faf" title="MQuadTree::heuristicAllowed" alt="" coords="456,112,645,141">
+<area shape="rect" href="$classMQuadTree.html#c673d45de18dcb7f87622d7a3bcd5a30" title="MQuadTree::maxLevel" alt="" coords="475,165,627,195">
+<area shape="rect" href="$classMQuadTree.html#875ab643966a37c0f6b86346be51c93d" title="MQuadTree::minLevel" alt="" coords="477,219,624,248">
+<area shape="rect" href="$classMQuadTree_1_1Node.html#d2df330d3d135626365321febda303ea" title="Pointer to the first son&#45;node of this node in the tree." alt="" coords="700,59,863,88">

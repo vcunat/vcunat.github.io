@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Přehled některých knihoven Haskellu</title>
+	<link rel="stylesheet" type="text/css" href="../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div id="TOC" class="level2"><h1>Přehled některých knihoven Haskellu</h1> <ul>
+ <li><a href="#indexování">Indexování</a></li>
+ <li><a href="#funkcionální-pole">Funkcionální pole</a></li>
+ <li><a href="#jiné-typy-polí">Jiné typy polí</a></li>
+ </ul> </div>
+<div id="indexování" class="section level2">
+<h2>Indexování</h2>
+<ul>
+<li><p>pro typy použitelné pro indexaci polí je určena třída <code>Ix i</code>, která odpovídá izomorfnosti se souvislým úsekem celých čísel:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> (<span class="dt">Ord</span> i) <span class="ot">=&gt;</span> <span class="dt">Ix</span> i <span class="kw">where</span>
+<span class="ot">	range     ::</span> (i,i) <span class="ot">-&gt;</span> [i]
+<span class="ot">	index     ::</span> (i,i) <span class="ot">-&gt;</span> i <span class="ot">-&gt;</span> <span class="dt">Int</span>
+<span class="ot">	inRange   ::</span> (i,i) <span class="ot">-&gt;</span> i <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+<span class="ot">	rangeSize ::</span> (i,i) <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre></li>
+<li>třída má instance pro celočíselné typy, <code>Bool</code>, <code>Char</code> a k-tice prvků z <code>Ix</code></li>
+<li><p>instanci <code>Ix</code> lze získat automaticky pomocí <code>deriving</code> pokud je typ enumerace (všechny konstruktory jsou nulární) nebo má jen jeden konstruktor parametrizovaný prvky <code>Ix</code></p></li>
+</ul>
+</div>
+<div id="funkcionální-pole" class="section level2">
+<h2>Funkcionální pole</h2>
+<ul>
+<li>jsou neměnná, ale indexovatelná v <span class="math"><em>O</em>(1)</span></li>
+<li>patří do třídy <code>IArray</code>, níže je vždy vynechán kontext <code>(Ix i, IArray a e) =&gt;</code></li>
+<li><p>vytvoření z hranic indexů a buď seznamu (index,hodnota) nebo rovnou seznamu hodnot:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">array     ::</span> (i, i) <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> a i e
+<span class="ot">listArray ::</span> (i, i) <span class="ot">-&gt;</span> [e] <span class="ot">-&gt;</span> a i e</code></pre></li>
+<li><p>vytvoření s akumulační funkcí: <!-- TODO: příklady: použití k-tic pro indexaci, standardní pole není striktní v hodnotách --></p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">accumArray <span class="ot">::</span>
+(e <span class="ot">-&gt;</span> e' <span class="ot">-&gt;</span> e) <span class="co">-- ^ funkce kombinujici prvky na pozici</span>
+<span class="ot">-&gt;</span> e           <span class="co">-- ^ implicitni obsah kazde pozice</span>
+<span class="ot">-&gt;</span> (i, i)      <span class="co">-- ^ hranice</span>
+<span class="ot">-&gt;</span> [(i, e')]   <span class="co">-- ^ seznam asociací</span>
+<span class="ot">-&gt;</span> a i e       <span class="co">-- ^ výsledné pole</span></code></pre></li>
+<li><p>další užitečné funkce:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(!)     ::</span> a i e <span class="ot">-&gt;</span> i <span class="ot">-&gt;</span> e
+<span class="ot">bounds  ::</span> a i e <span class="ot">-&gt;</span> (i, i)
+<span class="ot">indices ::</span> a i e <span class="ot">-&gt;</span> [i]
+<span class="ot">elems   ::</span> a i e <span class="ot">-&gt;</span> [e]
+<span class="ot">assocs  ::</span> a i e <span class="ot">-&gt;</span> [(i, e)]</code></pre></li>
+<li><p>modifikace (vytvoření změněné kopie) – standardně nebo s akumulací:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(//)  ::</span> a i e <span class="ot">-&gt;</span> [(i, e)] <span class="ot">-&gt;</span> a i e
+<span class="ot">accum ::</span> (e <span class="ot">-&gt;</span> e' <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span> a i e <span class="ot">-&gt;</span> [(i, e')] <span class="ot">-&gt;</span> a i e</code></pre></li>
+<li><p>mapování změnou prvků pole nebo přeuspořádáním indexů:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">amap  ::</span> (e' <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span> a i e' <span class="ot">-&gt;</span> a i e
+<span class="ot">ixmap ::</span> (i, i) <span class="ot">-&gt;</span> (i <span class="ot">-&gt;</span> j) <span class="ot">-&gt;</span> a j e <span class="ot">-&gt;</span> a i e</code></pre></li>
+<li>implementace s různou boxovaností prvků pole:
+<ul>
+<li><code>Array i e</code> je standardní pole s línými (boxovanými) hodnotami – lze v něm mít rekurzivní závislosti</li>
+<li><code>UArray i e</code> je striktní pole - vyšší efektivita</li>
+</ul></li>
+</ul>
+</div>
+<div id="jiné-typy-polí" class="section level2">
+<h2>Jiné typy polí</h2>
+<ul>
+<li>imperativní pole – třída <code class="sourceCode haskell"><span class="kw">class</span> (<span class="dt">Monad</span> m) <span class="ot">=&gt;</span> <span class="dt">MArray</span> a e m</code> – umožňují klasickou práci s polem, ale všechny operace musí být prováděny v monádě (typicky <code>IO</code> nebo <code>ST</code>, tedy pole <code>IO</code>(<code>U</code>)<code>Array</code> nebo <code>ST</code>(<code>U</code>)<code>Array</code>)</li>
+<li>rozdílová pole <code>Diff</code>(<code>U</code>)<code>Array</code>:
+<ul>
+<li>používají funkcionální interface <code>IArray</code></li>
+<li>uvnitř využívají monadická pole pro rychlé změny</li>
+<li>přístup a modifikace poslední verze v <span class="math"><em>O</em>(1)</span> (funkcionálně!)</li>
+<li>starší verze mají pomalejší přístup (průchod seznamu změn od nové verze) a při modifikaci je celé pole překopírováno (transparentně)</li>
+<li>lze použít <code>pole // []</code> pro jistotu rychlého přístupu - udělá kopii pokud by byl přístup k <code>pole</code> nepřímý</li>
+</ul></li>
+</ul>
+</div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May 14.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

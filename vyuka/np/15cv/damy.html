@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - damy</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">/* Problém N dam: umístěte N šachových dam</span>
+<span class="co">    na desku NxN tak, že se vzájemně neohrožují.</span>
+<span class="co">    Vracejte postupně všechny možnosti.</span>
+<span class="co">*/</span>
+<span class="co">% damy(+N, -Výsledek)</span>
+
+<span class="co">%diagonala(+Pozice nove damy, +Pozice predchozich dam).</span>
+<span class="co">%uspjeje pokud se damy neohrozuji diagonalne</span>
+diagonala(<span class="dt">P</span><span class="kw">,</span> <span class="dt">Ps</span>) <span class="kw">:-</span>diagonala(<span class="dt">P</span><span class="kw">,</span> <span class="dv">1</span><span class="kw">,</span> <span class="dt">Ps</span>)<span class="kw">.</span>
+
+<span class="co">%diagonala(+Pozice nove damy, +Offset,+Pozice zbyvajicich dam).</span>
+diagonala(<span class="dt">_</span><span class="kw">,</span><span class="dt">_</span><span class="kw">,</span>[])<span class="kw">.</span>
+diagonala(<span class="dt">P</span><span class="kw">,</span> <span class="dt">O</span><span class="kw">,</span> [<span class="dt">X</span><span class="fu">|</span><span class="dt">Xs</span>]) <span class="kw">:-</span>
+	<span class="dt">P</span><span class="fu">+</span><span class="dt">O</span> <span class="dt">=\=</span> <span class="dt">X</span><span class="kw">,</span> <span class="dt">P</span><span class="fu">-</span><span class="dt">O</span> <span class="dt">=\=</span> <span class="dt">X</span><span class="kw">,</span>
+	<span class="dt">O1</span> <span class="dt">is</span> <span class="dt">O</span><span class="dv">+1</span><span class="kw">,</span> diagonala(<span class="dt">P</span><span class="kw">,</span> <span class="dt">O1</span><span class="kw">,</span> <span class="dt">Xs</span>)<span class="kw">.</span>
+
+damy(<span class="dt">N</span><span class="kw">,</span> <span class="dt">V</span>) <span class="kw">:-</span> numlist(<span class="dv">1</span><span class="kw">,</span> <span class="dt">N</span><span class="kw">,</span> <span class="dt">Pole</span>)<span class="kw">,</span> damy([]<span class="kw">,</span> <span class="dt">Pole</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">.</span>
+
+<span class="co">%damy(+Zatim umistene damy, +Nepouzite sloupce, -Vysledek)</span>
+damy(<span class="dt">P</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">P</span>)<span class="kw">.</span>
+damy(<span class="dt">Zatim</span><span class="kw">,</span> <span class="dt">Nepouzito</span><span class="kw">,</span> <span class="dt">Vysledek</span>) <span class="kw">:-</span>
+	select(<span class="dt">Poz</span><span class="kw">,</span> <span class="dt">Nepouzito</span><span class="kw">,</span> <span class="dt">Nep1</span>)<span class="kw">,</span> diagonala(<span class="dt">Poz</span><span class="kw">,</span> <span class="dt">Zatim</span>)<span class="kw">,</span>
+	damy([<span class="dt">Poz</span><span class="fu">|</span><span class="dt">Zatim</span>]<span class="kw">,</span> <span class="dt">Nep1</span><span class="kw">,</span> <span class="dt">Vysledek</span>)<span class="kw">.</span>
+
+<span class="co">%zobraz(+Radky)</span>
+zobraz([])<span class="kw">.</span>
+zobraz([<span class="dt">H</span><span class="fu">|</span><span class="dt">T</span>]) <span class="kw">:-</span> napis(<span class="dt">H</span>)<span class="kw">,</span> zobraz(<span class="dt">T</span>)<span class="kw">.</span>
+
+<span class="co">%napis(+Pozice)</span>
+napis(<span class="dv">1</span>) <span class="kw">:-</span> <span class="fu">put_char</span>('<span class="er">X</span>')<span class="kw">,</span> <span class="fu">nl</span><span class="kw">.</span>
+napis(<span class="dt">N</span>) <span class="kw">:-</span> <span class="dt">N</span> <span class="dt">&gt;</span> <span class="dv">1</span><span class="kw">,</span> <span class="fu">put_char</span>('.')<span class="kw">,</span> <span class="dt">N1</span> <span class="dt">is</span> <span class="dt">N</span><span class="dv">-1</span><span class="kw">,</span> napis(<span class="dt">N1</span>)<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="fu">?-</span> damy(<span class="dv">3</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">.</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> damy(<span class="dv">4</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">.</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>] <span class="kw">;</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+
+<span class="fu">?-</span> damy(<span class="dv">4</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">,</span> zobraz(<span class="dt">V</span>)<span class="kw">.</span>
+..<span class="dt">X</span>
+<span class="dt">X</span>
+...<span class="dt">X</span>
+<span class="kw">.</span><span class="dt">X</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>] <span class="kw">;</span>
+<span class="kw">.</span><span class="dt">X</span>
+...<span class="dt">X</span>
+<span class="dt">X</span>
+..<span class="dt">X</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> damy(<span class="dv">7</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">,</span> zobraz(<span class="dt">V</span>)<span class="kw">.</span>
+.....<span class="dt">X</span>
+...<span class="dt">X</span>
+<span class="kw">.</span><span class="dt">X</span>
+......<span class="dt">X</span>
+....<span class="dt">X</span>
+..<span class="dt">X</span>
+<span class="dt">X</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>] <span class="kw">;</span>
+....<span class="dt">X</span>
+<span class="kw">.</span><span class="dt">X</span>
+.....<span class="dt">X</span>
+..<span class="dt">X</span>
+......<span class="dt">X</span>
+...<span class="dt">X</span>
+<span class="dt">X</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">1</span>] <span class="kw">;</span>
+<span class="co">% ...</span>
+
+<span class="fu">?-</span> <span class="dt">V</span><span class="kw">=</span>[<span class="dv">1</span><span class="fu">|</span><span class="dt">_</span>]<span class="kw">,</span> damy(<span class="dv">10</span><span class="kw">,</span> <span class="dt">V</span>)<span class="kw">,</span> zobraz(<span class="dt">V</span>)<span class="kw">.</span>
+<span class="dt">X</span>
+.......<span class="dt">X</span>
+.....<span class="dt">X</span>
+........<span class="dt">X</span>
+..<span class="dt">X</span>
+.........<span class="dt">X</span>
+...<span class="dt">X</span>
+......<span class="dt">X</span>
+....<span class="dt">X</span>
+<span class="kw">.</span><span class="dt">X</span>
+<span class="dt">V</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">5</span><span class="fu">|</span>...] <span class="kw">;</span>
+<span class="co">% ...</span>
+
+
+
+<span class="fu">?-</span> prevod(cislo(<span class="dv">2</span><span class="kw">,</span><span class="dv">3</span>)<span class="kw">,</span> <span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="fl">11.111</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="fu">?-</span> prevod(cislo(<span class="dv">2</span><span class="kw">,</span><span class="dv">30</span>)<span class="kw">,</span> <span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="fl">11.11111111111111</span> <span class="kw">.</span>
+
+<span class="fu">?-</span> test(cislo(<span class="dv">2</span><span class="kw">,</span><span class="dv">0</span>)<span class="kw">,</span> cislo(<span class="dv">1</span><span class="kw">,</span><span class="dv">1</span>))<span class="kw">.</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> prevod(cislo(<span class="dv">2</span><span class="kw">,</span><span class="dv">0</span>)<span class="kw">,</span><span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">11</span> <span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> <span class="dt">X</span> <span class="dt">is</span> <span class="dv">11</span><span class="dt">*</span><span class="fl">1.1</span><span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="fl">12.100000000000001</span><span class="kw">.</span>
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April  8.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

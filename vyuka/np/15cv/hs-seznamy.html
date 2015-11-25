@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Práce se seznamy</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Práce se seznamy</h1> 
+<pre class="sourceCode literate haskell"><code class="sourceCode haskell">
+<span class="co">-- skytí knihovních funkcí které napíšeme</span>
+<span class="kw">import </span><span class="dt">Prelude</span> <span class="kw">hiding</span>
+    ( (<span class="fu">!!</span>), and, cycle, reverse, map, filter )
+
+and<span class="ot"> ::</span> [<span class="dt">Bool</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+and [] <span class="fu">=</span> <span class="dt">True</span>
+and (h<span class="fu">:</span>t) <span class="fu">=</span> h <span class="fu">&amp;&amp;</span> and t
+
+
+<span class="ot">(!!) ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> a
+(<span class="fu">!!</span>) (x<span class="fu">:</span>xs) n <span class="fu">|</span> n<span class="fu">==</span><span class="dv">0</span> <span class="fu">=</span> x
+              <span class="fu">|</span> n<span class="fu">&gt;</span><span class="dv">0</span> <span class="fu">=</span> xs <span class="fu">!!</span> (n<span class="fu">-</span><span class="dv">1</span>)
+              <span class="fu">|</span> otherwise <span class="fu">=</span> undefined
+[] <span class="fu">!!</span> _ <span class="fu">=</span> error <span class="st">&quot;krátký seznam&quot;</span>
+
+
+cycle<span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [a]
+cycle [] <span class="fu">=</span> []
+cycle l <span class="fu">=</span> l <span class="fu">++</span> cycle l
+<span class="co">-- (++) :: [a] -&gt; [a] -&gt; [a]</span>
+
+<span class="co">-- Bonus: vytvoření cyklického seznamu pomocí lenosti</span>
+cycle' l <span class="fu">=</span> c <span class="kw">where</span>
+    c <span class="fu">=</span> l <span class="fu">++</span> c
+
+
+reverse<span class="ot"> ::</span> [a] <span class="ot">-&gt;</span> [a]
+reverse [] <span class="fu">=</span> []
+reverse (h<span class="fu">:</span>t) <span class="fu">=</span> (reverse t) <span class="fu">++</span> [h] 
+<span class="co">-- kvadratické, pokud vyhodnotíme všechno</span>
+
+<span class="co">-- lineární pomocí akumulátoru</span>
+reverse' s <span class="fu">=</span> reverseCat s []
+<span class="co">-- reverseCat a b == reverse a ++ b</span>
+reverseCat [] p <span class="fu">=</span> p
+reverseCat (h<span class="fu">:</span>t) p <span class="fu">=</span> reverseCat t (h<span class="fu">:</span>p)
+
+
+filter<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+filter f [] <span class="fu">=</span> []
+<span class="co">--filter f (h:t) = if f h then h : filter f t else filter f t</span>
+filter f (h<span class="fu">:</span>t) <span class="fu">=</span> (<span class="kw">if</span> f h <span class="kw">then</span> [h] <span class="kw">else</span> []) <span class="fu">++</span> filter f t
+
+
+map<span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [b]
+map _ [] <span class="fu">=</span> []
+map f (x<span class="fu">:</span>xs) <span class="fu">=</span> (f x <span class="fu">:</span> map f xs)
+
+<span class="co">{-</span>
+<span class="co">&gt;   take 5 $ map (* 23) $ filter (&gt;10) [1..]</span>
+<span class="co">[253,276,299,322,345]</span>
+<span class="co">&gt;   :i ($)</span>
+<span class="co">($) :: (a -&gt; b) -&gt; a -&gt; b</span>
+<span class="co">infixr 0 $</span>
+<span class="co">-}</span>
+
+<span class="co">-- cíl mergesort (mimochodem, Data.List obsahuje sort)</span>
+mérdž l [] <span class="fu">=</span> l
+mérdž [] l <span class="fu">=</span> l
+mérdž (a<span class="fu">:</span>b) (c<span class="fu">:</span>d) <span class="fu">=</span> <span class="kw">if</span> a <span class="fu">&gt;</span> c
+    <span class="kw">then</span> c <span class="fu">:</span> (mérdž (a<span class="fu">:</span>b) d)
+    <span class="kw">else</span> a <span class="fu">:</span> (mérdž b (c<span class="fu">:</span>d))
+
+split [] <span class="fu">=</span> ([], [])
+split (a<span class="fu">:</span>[]) <span class="fu">=</span> ([a], [])
+split (x<span class="fu">:</span>y<span class="fu">:</span>xs) <span class="fu">=</span> ((x<span class="fu">:</span>a), (y<span class="fu">:</span>b)) <span class="kw">where</span>
+    (a, b) <span class="fu">=</span> split xs
+
+méčsort [] <span class="fu">=</span> []
+méčsort [a] <span class="fu">=</span> [a]
+méčsort l <span class="fu">=</span> mérdž a b <span class="kw">where</span>
+    a <span class="fu">=</span> méčsort c
+    b <span class="fu">=</span> méčsort d
+    (c, d) <span class="fu">=</span> split(l)
+
+
+<span class="co">-- Bonus k zamyšlení: efektivní a stručná verze</span>
+<span class="co">-- seznamu celé Fibonacciho posloupnosti</span>
+<span class="ot">fibs ::</span> [<span class="dt">Integer</span>]
+fibs <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:</span> <span class="dv">1</span> <span class="fu">:</span> zipWith (<span class="fu">+</span>) fibs (tail fibs)
+<span class="co">-- zipWith :: (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]</span>
+<span class="co">-- zipWith f (x:xs) (y:ys) = f x y : zipWith xs ys</span></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April 23.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

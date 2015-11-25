@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Přehled syntaxe Haskellu</title>
+	<link rel="stylesheet" type="text/css" href="../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div id="TOC" class="level2"><h1>Přehled syntaxe Haskellu</h1> <ul>
+ <li><a href="#základní-vlastnosti-jazyka">Základní vlastnosti jazyka</a></li>
+ <li><a href="#názvy-identifikátorů-a-operátorů">Názvy identifikátorů a operátorů</a></li>
+ <li><a href="#definice-funkcí-a-konstant">Definice funkcí a konstant</a></li>
+ <li><a href="#stráže-guards">Stráže (guards)</a></li>
+ <li><a href="#vzory-patterns">Vzory (patterns)</a></li>
+ <li><a href="#podmíněné-výrazy">Podmíněné výrazy</a></li>
+ <li><a href="#základní-typy">Základní typy</a></li>
+ <li><a href="#typové-deklarace">Typové deklarace</a></li>
+ <li><a href="#definice-typu">Definice typu</a></li>
+ <li><a href="#záznamy">Záznamy</a></li>
+ <li><a href="#list-comprehensions">List comprehensions</a></li>
+ <li><a href="#operátory">Operátory</a></li>
+ <li><a href="#typové-třídy">Typové třídy</a></li>
+ </ul> </div>
+<div id="základní-vlastnosti-jazyka" class="section level2">
+<h2>Základní vlastnosti jazyka</h2>
+<ul>
+<li>norma Haskell98, nepatrný update v Haskell 2010</li>
+<li>čistě funkcionální, referenční transparentnost</li>
+<li>bez implicitních side-efektů nebo přístupu ke globálním datům</li>
+<li>silně a staticky typovaný, s automatickým typováním</li>
+<li>líně vyhodnocovaný (implicitně)</li>
+<li><a href="hs-knihovny.html">přehled obsahu některých standardních knihoven</a></li>
+<li>podrobnosti najdete přímo v <a href="https://www.haskell.org/onlinereport/haskell2010/">normě</a> (je celkem čitelná)</li>
+</ul>
+</div>
+<div id="názvy-identifikátorů-a-operátorů" class="section level2">
+<h2>Názvy identifikátorů a operátorů</h2>
+<ul>
+<li>identifikátor začíná písmenem a každý další znak je písmeno, číslice, podtržítko nebo <em>apostrof</em> (například <code>n_2'</code>)</li>
+<li>názvy jsou case-sensitive, velikost prvního písmena mění význam:
+<ul>
+<li>velké: typové konstruktory, třídy a datové konstruktory</li>
+<li>malé: typové proměnné, funkce a konstanty</li>
+</ul></li>
+<li>operátory jsou vždy tvořeny maximální posloupností nealfabetických znaků, operátory které jsou konstruktory musí začínat dvojtečkou (například <code>3*-2</code> selže na nedefinovaném <code>*-</code>)</li>
+</ul>
+</div>
+<div id="definice-funkcí-a-konstant" class="section level2">
+<h2>Definice funkcí a konstant</h2>
+<ul>
+<li>definice konstant: <em>vzor <code>=</code> výraz</em> definuje všechny názvy obsažené ve vzoru</li>
+<li>definice n-ární funkce: <em>jméno vzor<sub>1</sub>… vzor<sub>n</sub> <code>=</code> výraz</em></li>
+<li><p>definice se <strong>stráže</strong>mi:<br /><em>jméno vzor<sub>1</sub> … vzor<sub>n</sub><br />	<code>|</code> stráž<sub>1</sub> <code>=</code> výraz<sub>1</sub><br />	<code>|</code> …<br />	<code>|</code> stráž<sub>m</sub> <code>=</code> výraz<sub>m</sub></em></p></li>
+<li><p>definice pomocných funkcí a konstant <strong>po</strong> jejich použití:<br /><em>definice_funkce <code>where</code><br />	definice_pomocné_funkce<sub>1</sub><br />	…<br />	definice_pomocné_funkce<sub>m</sub></em><br /><code>where</code> lze použít jen při top-level definici nebo za <code>case</code>, pomocné definice jsou společné pro všechny větve se strážemi a mohou být vzájemně rekurzivní</p></li>
+<li><p>definice pomocných funkcí a konstant <strong>před</strong> jejich použitím:<br /><em><code>let</code><br />	definice_pomocné_funkce<sub>1</sub><br />	…<br />	definice_pomocné_funkce<sub>m</sub><br /><code>in</code> výraz</em><br /><code>let</code> výraz lze použít místo libovolného výrazu, pomocné definice mohou být vzájemně rekurzivní</p></li>
+<li><p>definice <strong>anonymní funkce</strong> (<span class="math"><em>λ</em></span>-funkce) je výraz <em><code>\</code> vzor<sub>1</sub> … vzor<sub>n</sub> <code>-&gt;</code> výraz</em>, například</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">squareList l <span class="fu">=</span> map (\x <span class="ot">-&gt;</span> x<span class="fu">*</span>x) l</code></pre></li>
+</ul>
+</div>
+<div id="stráže-guards" class="section level2">
+<h2>Stráže (guards)</h2>
+<ul>
+<li>každá <strong>stráž</strong> v definicích funkcí nebo case-výrazech je seznam oddělený čárkami, pro úspěch musí uspět každá položka seznamu</li>
+<li>každá položka je jedno z:
+<ul>
+<li>boolský výraz – nejčastější varianta, uspěje při vyhodnocení na <code>True</code></li>
+<li>let-deklarace (bez <code>in</code>) – zavede lokální funkci, uspěje vždy</li>
+<li><em>vzor <code>&lt;-</code> výraz</em> (od Haskell 2010) – vyhodnotí výraz a zkusí výsledek navázat na vzor (zpřístupňuje nová jména)</li>
+</ul></li>
+</ul>
+</div>
+<div id="vzory-patterns" class="section level2">
+<h2>Vzory (patterns)</h2>
+<ul>
+<li><em>název</em> naváže (match) cokoliv a zpřístupní pod tímto názvem, žádný název se nesmí v jednom vzoru opakovat (<em>není unifikace</em>)</li>
+<li><em><code>_</code></em> (podtržítko) jen naváže cokoliv</li>
+<li><em>literál</em> naváže jen shodnou hodnotu, například <code>12.3</code> nebo <code>&quot;text&quot;</code></li>
+<li><em>název<code>@</code>vzor</em> je jako <em>vzor</em> ale navíc zpřístupní celek pod novým názvem</li>
+<li><em>Konstruktor vzor<sub>1</sub> … vzor<sub>n</sub></em> naváže hodnotu vytvořenou daným n-árním konstruktorem, navíc se musí navázat jeho parametry na dané vzory.
+<ul>
+<li>funguje i pro nulární konstruktory, například <code>True</code></li>
+<li>seznamy mají speciální konstruktory <code>[]</code> a <em>vzor<sub>hlava</sub><code>:</code>vzor<sub>tělo</sub></em> a <em><code>[</code>vzor<sub>1</sub><code>,</code>…<code>,</code>vzor<sub>k</sub><code>]</code></em></li>
+<li>k-tice mají speciální konstruktor <em><code>(</code>vzor<sub>1</sub><code>,</code>…<code>,</code>vzor<sub>k</sub><code>)</code></em></li>
+<li>vzory lze vnořovat do sebe, například <code class="sourceCode haskell">(<span class="dt">True</span><span class="fu">:</span>_)<span class="fu">:</span>dalsi</code> je splněn jen pokud první prvek prvního seznamu je <code>True</code></li>
+</ul></li>
+<li>vzor <em>Kons <code>{}</code></em> uspěje na hodnotách zkonstruovaných n-árním konstruktorem <em>Kons</em>, podobně také <a href="#záznamy">záznamové vzory</a></li>
+<li><em><code>~</code>vzor</em> (líný vzor) uspěje vždy a zkouší vázat až v okamžiku použití názvů definovaných vzorem (při selhání vyvolá výjimku, typicky chceme použít něco jiného)</li>
+<li>aritmetické <em>n+k</em> vzory byly v Haskellu 2010 odstraněny (nepoužívat)</li>
+</ul>
+</div>
+<div id="podmíněné-výrazy" class="section level2">
+<h2>Podmíněné výrazy</h2>
+<ul>
+<li><code>if</code> vytváří obyčejný výraz a musí vždy obsahovat stejně otypované větve: <em><code>if</code> bool_výraz <code>then</code> výraz <code>else</code> výraz</em></li>
+<li><code>case</code> je vícecestný <code>if</code> s vázáním výsledku jednoho výrazu na různé vzory:<br /><em><code>case</code> výraz <code>of</code><br />	vzor<sub>1</sub> <code>-&gt;</code> výraz<sub>1</sub><br />	…<br />	vzor<sub>m</sub> <code>-&gt;</code> výraz<sub>m</sub></em><br />Mezi <em>vzor<sub>i</sub></em> a <code>-&gt;</code> může navíc být seznam stráží <em><code>|</code> stráž<sub>i,1</sub><code>,</code>… <code>,</code>stráž<sub>i,k</sub></em>, navíc lze použít <code>where</code> společné pro všechny větve.</li>
+</ul>
+</div>
+<div id="základní-typy" class="section level2">
+<h2>Základní typy</h2>
+<ul>
+<li><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bool</span> <span class="fu">=</span> <span class="dt">False</span> <span class="fu">|</span> <span class="dt">True</span></code> pro pravdivostní hodnoty</li>
+<li><code>Int</code> a <code>Integer</code> pro omezená a neomezená celá čísla (v GHC má <code>Int</code> typicky velikost ukazatele na platformě a <code>Integer</code> je z knihovny GMP)</li>
+<li><code>Char</code> pro unicode znaky, literály <code>'a'</code> (viz funkce v <a href="http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-Char.html"><code>Data.Char</code></a>)</li>
+<li><em><code>[</code>a<code>]</code></em> pro seznam prvků typu <em>a</em></li>
+<li><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">String</span> <span class="fu">=</span> [<span class="dt">Char</span>]</code> pro řetězce, literály <code class="sourceCode haskell"><span class="st">&quot;abcd&quot;</span></code></li>
+<li><em><code>(</code>a<sub>1</sub><code>,</code> …<code>,</code> a<sub>k</sub><code>)</code></em> pro k-tice kde i-tý člen má typ <em>a<sub>i</sub></em></li>
+<li>void-typ <code>()</code>, který může mít jen jednu hodnotu <code>()</code> (je to 0-tice)</li>
+<li><code>Double</code> a <code>Float</code> pro klasická IEEE-754 čísla</li>
+<li><p>přidání <code>Nothing</code> jako indikátor neůspěchu:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Maybe</span> a <span class="fu">=</span> <span class="dt">Nothing</span> <span class="fu">|</span> <span class="dt">Just</span> a</code></pre></li>
+</ul>
+</div>
+<div id="typové-deklarace" class="section level2">
+<h2>Typové deklarace</h2>
+<ul>
+<li><em>výraz <code>::</code> typ</em> je výraz se specifikovaným typem, například <code class="sourceCode haskell"><span class="dv">1</span> <span class="fu">+</span> (<span class="dv">1</span><span class="ot">::</span><span class="dt">Integer</span>)</code></li>
+<li>lze také pro více funkcí/konstant najednou <em>jméno<sub>1</sub><code>,</code> …<code>,</code> jméno<sub>k</sub> <code>::</code> typ</em></li>
+<li>deklarace může obsahovat kontext specifikující požadavky na třídy pro zmíněné typové proměnné, syntax <em>jména <code>::</code> kontext <code>=&gt;</code> typ</em> kde kontext je ve tvaru <em><code>(</code>Třída<sub>1</sub> params<sub>1</sub><code>,</code>… <code>,</code>Třída<sub>k</sub> params<sub>k</sub><code>)</code></em> (závorky lze vynechat pokud k=1)</li>
+<li>typová specifikace může vypadat jako:
+<ul>
+<li>volná proměnná (začíná malým písmenem) za kterou lze dosadit <em>libovolný typ</em> společný pro všechny výskyty proměnné v dané typové specifikaci (typ musí splňovat kontext)</li>
+<li>funkční typ <em>typ<sub>vstupu</sub> <code>-&gt;</code> typ<sub>výstupu</sub></em>, asociuje doprava – například <code class="sourceCode haskell">a <span class="ot">-&gt;</span> (b <span class="ot">-&gt;</span> c)</code> se závorkami i bez deklaruje typ funkce s dvěma parametry typů <code>a</code> a <code>b</code> a výsledkem typu <code>c</code></li>
+<li>parametrizovaný typový konstruktor <em>Typ_kon Param<sub>1</sub> … Param<sub>k</sub></em> kde <em>Param<sub>i</sub></em> je libovolná typová specifikace, například <code class="sourceCode haskell"><span class="dt">Maybe</span> <span class="dt">Int</span></code> nebo <code class="sourceCode haskell">(<span class="dt">Char</span>,<span class="dt">Float</span>,<span class="dt">Float</span>)</code> nebo <code class="sourceCode haskell">[<span class="dt">Maybe</span> a]</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="definice-typu" class="section level2">
+<h2>Definice typu</h2>
+<ul>
+<li>typová synonyma pomocí <em><code>type</code> Typ_kon parametry = Specifikace_typu</em> definují zaměnitelné typy (zkratky), například <code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">String</span> <span class="fu">=</span> [<span class="dt">Char</span>]</code> nebo <code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">MaybeSez</span> a <span class="fu">=</span> [<span class="dt">Maybe</span> a]</code> (<code>type</code> nemůže zavádět nové datové konstruktory)</li>
+<li><p><code>newtype</code> definuje stejným způsobem jako <code>type</code>, akorát zavádí nový konstruktor a vzniká odlišný typ z hlediska typového systému – stejná reprezentace, ale <em>nejdou zaměnit</em>, například <code class="sourceCode haskell"><span class="kw">newtype</span> <span class="dt">Cislo</span> <span class="fu">=</span> <span class="dt">Cislo</span> <span class="dt">Int</span></code></p>
+<p>Velmi často se používá konvence: <code class="sourceCode haskell"><span class="kw">newtype</span> <span class="dt">Age</span> <span class="fu">=</span> <span class="dt">Age</span> {<span class="ot"> unAge ::</span> <span class="dt">Int</span> }</code></p>
+<p>což nám dává dvě vzájemně inverzní funkce pro konverzi</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Age</span><span class="ot">   ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Age</span>  
+<span class="ot">unAge ::</span> <span class="dt">Age</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
+<p>Výhoda <code>newtype</code> oproti použití <code>data</code> s jedním konstruktorem je ve výkonu. Norma zaručuje že změna je jen na úrovni typu při kompilaci, reprezentace obou typů je identická a tedy konverze mezi nimi je prázdná operace.</p></li>
+<li>úplně nový typ se definuje pomocí <em><code>data</code> Typ_kon typ_params = Dat_kon<sub>1</sub> Params<sub>1</sub> <code>|</code> … <code>|</code> Dat_kon<sub>k</sub> Params<sub>k</sub></em>, například <code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Maybe</span> a <span class="fu">=</span> <span class="dt">Nothing</span> <span class="fu">|</span> <span class="dt">Just</span> a</code> nebo <code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Obrazec</span> bod <span class="fu">=</span> <span class="dt">Cara</span> bod bod <span class="fu">|</span> <span class="dt">Trojuhelnik</span> bod bod bod</code><br />(zavedené datové konstruktory se chovají jako n<sub>i</sub>-ární funkce)</li>
+<li><em>Params<sub>i</sub></em> může vždy být jedno z:
+<ul>
+<li>posloupnost n<sub>i</sub> typů oddělených mezerami (n<sub>i</sub><span class="math"> ≥ 0</span>) kde jednotlivé položky jsou identifikovány pozičně (typy lze definovat i rekurzivně)</li>
+<li><a href="#záznamy">záznam</a> (record) tvaru <em><code>{</code> typ_dekl<sub>i,1</sub><code>,</code>… <code>,</code> typ_dekl<sub>i,n</sub> <code>}</code></em> kde <em>typ_dekl<sub>n,i</sub></em> je tvaru <em>jména <code>::</code> typ</em> <!-- (případně s kontextem) --></li>
+</ul></li>
+</ul>
+<!--
+- `data` a `newtype` definice mohou mít před názvem navíc kontext, například
+	`data Ord klic => Strom klic = List | Vrchol (Strom klic) klic (Strom klic)`
+	(kontext omezuje schopnost zkonstruovat hodnotu ale ne samotnou existenci typu)
+-->
+
+<ul>
+<li><code>data</code> a <code>newtype</code> definice můžou na konci specifikovat seznam <a href="#typové-třídy">tříd</a> pro které jsou automaticky vygenerovány instance, syntaxe je <em>typ_def <code>deriving (</code>Třída<sub>1</sub><code>,</code>… <code>,</code> Třída<sub>m</sub><code>)</code></em>, ale norma to zaručuje jen pro některé třídy: <code>Eq</code>, <code>Ord</code>, <code>Enum</code>, <code>Bounded</code>, <code>Show</code>, <code>Read</code>, <code>Ix</code> (závorky lze vynechat pokud <span class="math"><em>m</em> = 1</span>)</li>
+<li>infixní typové a datové konstruktory, typové proměnné, nebo třídy – musí začínat znakem <code>:</code> (seznamová <code>:</code> je tedy speciální instancí tohoto pravidla)</li>
+<li>TODO:
+<ul>
+<li>anotace striktnosti (možná jinam, s bang patterns?)</li>
+</ul></li>
+</ul>
+</div>
+<div id="záznamy" class="section level2">
+<h2>Záznamy</h2>
+<ul>
+<li><p>jména zavedená záznamovými konstruktory jsou <strong>globální</strong> funkce pro výběr položky, například definování</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Barva</span> <span class="fu">=</span> <span class="dt">RGB</span> {r,g,<span class="ot">b ::</span> <span class="dt">Int</span>} <span class="fu">|</span> <span class="dt">CMY</span> {c,m,<span class="ot">y ::</span> <span class="dt">Int</span>}</code></pre>
+<p>odpovídá (mimo jiné) definici globálních parciálních funkcí <code class="sourceCode haskell">r,g,b,c,m,<span class="ot">y ::</span> <span class="dt">Barva</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code>. Příklad polymorfního typu pro binární stromy:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Strom</span> l v <span class="fu">=</span> <span class="dt">List</span> l 
+	<span class="fu">|</span> <span class="dt">Vrchol</span> { levy,<span class="ot"> pravy ::</span> <span class="dt">Strom</span> l v,<span class="ot"> hodnota ::</span> v }</code></pre></li>
+<li>nová hodnota lze zkonstruovat:
+<ul>
+<li>použitím konstruktoru jako funkce s pozičními parametry <code class="sourceCode haskell"><span class="dt">RGB</span>, <span class="dt">CMY</span><span class="ot"> ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Barva</span></code>, například <code class="sourceCode haskell">cerna <span class="fu">=</span> <span class="dt">RGB</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span></code></li>
+<li>s použitím názvů: <code class="sourceCode haskell"><span class="dt">RGB</span> {g<span class="fu">=</span><span class="dv">0</span>, b<span class="fu">=</span><span class="dv">128</span>}</code>, nezmíněné položky dostanou hodnotu <code>undefined</code></li>
+<li>pozměněním existující hodnoty: <code class="sourceCode haskell">modra <span class="fu">=</span> cerna {b<span class="fu">=</span><span class="dv">255</span>}</code></li>
+</ul></li>
+<li><p>analogickou syntaxi lze používat jako vzory pro pattern matching, například <code class="sourceCode haskell"><span class="dt">CMY</span> { c<span class="fu">=</span><span class="dv">0</span>, m<span class="fu">=</span>mVal }</code> se naváže pokud byla hodnota zkonstruována pomocí <code>CMY</code>, ve složce <code>c</code> je <code>0</code> a do lokálního <code>mVal</code> se uloží hodnota složky <code>m</code></p></li>
+</ul>
+</div>
+<div id="list-comprehensions" class="section level2">
+<h2>List comprehensions</h2>
+<ul>
+<li>zápis <em><code>[</code> výraz <code>|</code> spec<sub>1</sub><code>,</code> …<code>,</code> spec<sub>k</sub> <code>]</code></em> kde <em>spec<sub>i</sub></em> je vždy buď boolská stráž, let-deklarace, nebo generátor tvaru <em>jméno<sub>i</sub> <code>&lt;-</code> sez_výraz<sub>i</sub></em></li>
+<li>ve výsledném seznamu jsou právě ty instance <em>výraz</em> kde proměnné jsou libovolně zvolené ze svých generujících seznamů a stráže jsou splněné</li>
+<li>existují různá rozšíření – paralelní generování (místo <code>zip</code>), SQL-like syntaxe</li>
+</ul>
+</div>
+<div id="operátory" class="section level2">
+<h2>Operátory</h2>
+<ul>
+<li><em><code>(</code>operátor<code>)</code></em> je funkce, například <code class="sourceCode haskell">(<span class="fu">++</span>) <span class="st">&quot;abc&quot;</span> <span class="st">&quot;def&quot;</span> <span class="fu">==</span> <span class="st">&quot;abc&quot;</span> <span class="fu">++</span> <span class="st">&quot;def&quot;</span></code></li>
+<li><em><code>`</code>funkce<code>`</code></em> je infixní operátor, například <code class="sourceCode haskell"><span class="dv">10</span> <span class="ot">`div`</span> <span class="dv">3</span> <span class="fu">==</span> div <span class="dv">10</span> <span class="dv">3</span></code></li>
+<li>parciální aplikace binárního operátoru má syntaxi <em><code>(</code>par<sub>1</sub> op<code>)</code></em> a <em><code>(</code>op par<sub>1</sub><code>)</code></em>, například <code class="sourceCode haskell">(<span class="ot">`mod`</span> <span class="dv">3</span>)</code> počítá modulo třemi a <code class="sourceCode haskell">(<span class="dv">10</span> <span class="fu">/</span>)</code> dělí deset čímkoliv</li>
+<li>infixní operátory mají prioritu 0-9 a asociativitu která rozhoduje o závorkování při setkání operátorů se stejnou asociativitou (levá, pravá, žádná)</li>
+<li>deklarace <em>fixity číslo op<sub>1</sub><code>,</code>… <code>,</code> op<sub>k</sub></em> kde <em>fixity</em> je <code>infixl</code> nebo <code>infixr</code> nebo <code>infix</code></li>
+<li>nejvyšší prioritu 10 má aplikace funkce, defaultní priorita je <code>infixl 9</code></li>
+<li>prioritu lze definovat i pro infixní použití funkcí nebo datových konstruktorů: <code class="sourceCode haskell"><span class="kw">infixl</span> <span class="dv">7</span> <span class="ot">`div`</span>, <span class="ot">`mod`</span></code></li>
+<li>infixní konstruktory jsou právě operátory začínající dvojtečkou, seznamová <code>:</code> je speciální instance tohoto pravidla</li>
+</ul>
+</div>
+<div id="typové-třídy" class="section level2">
+<h2>Typové třídy</h2>
+<ul>
+<li>typová třída odpovídá interface v objektově-orientovaném programování (ne třídě v OOP!), tedy specifikuje funkce které musí být definované na všech typech dané třídy</li>
+<li>definice třídy pomocí <em><code>class</code> Třída typ_prom <code>where</code> specifikace_funkcí</em> kde specifikace může obsahovat
+<ul>
+<li>typové signatury využívající typovou proměnnou <em>typ_prom</em></li>
+<li>defaultní implementace definovaných funkcí (typicky využívající jiné funkce z té samé nebo nadřazené třídy)</li>
+</ul>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Eq</span> a <span class="kw">where</span>
+	(<span class="fu">==</span>),<span class="ot"> (/=) ::</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+	x <span class="fu">/=</span> y     <span class="fu">=</span>  not (x <span class="fu">==</span> y)
+	x <span class="fu">==</span> y     <span class="fu">=</span>  not (x <span class="fu">/=</span> y)</code></pre></li>
+<li>funkce definované třídou jsou globální a fungují na libovolných typech dané třídy</li>
+<li>aby mohl být typ zařazen do třídy, je nutné definovat jeho instanci třídy pomocí <em><code>instance</code> Třída Typ <code>where</code> definice_funkcí</em></li>
+<li><p>definice třídy nebo instance může navíc obsahovat před názvem třídy <strong>kontext</strong> specifikující požadavky na třídy pro použitou typovou proměnnou (tím se vytváří acyklická hierarchie tříd)</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">instance</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Eq</span> (<span class="dt">Maybe</span> a) <span class="kw">where</span>
+	<span class="dt">Nothing</span> <span class="fu">==</span> <span class="dt">Nothing</span>  <span class="fu">=</span>  <span class="dt">True</span>
+	<span class="dt">Just</span> x  <span class="fu">==</span> <span class="dt">Just</span> y   <span class="fu">=</span>  x <span class="fu">==</span> y
+	_ <span class="fu">==</span> _              <span class="fu">=</span>  <span class="dt">False</span></code></pre></li>
+<li>viz <a href="#typové-deklarace">typové deklarace</a> a definice: specifikace kontextu, automatická derivace instancí</li>
+<li><p>v praxi se často používají rozšíření pro víceparametrické třídy (více proměnných, například <code class="sourceCode haskell"><span class="dt">IArray</span> a e</code>), někdy dokonce se závislostmi mezi proměnnými – to dělá třídy silnější než podobné mechanismy z imperativních jazyků</p></li>
+</ul>
+<!--
+## Moduly
+-->
+
+
+</div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, May  7.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

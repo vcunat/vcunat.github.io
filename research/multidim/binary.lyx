@@ -1,0 +1,204 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+\end_modules
+\maintain_unincluded_children false
+\language czech
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 1
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Data Structers I - lecture contents summary"
+\pdf_author "Vladimír Čunát"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref page
+\pdf_pdfusetitle true
+\papersize a5paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 2cm
+\columnsep 1cm
+\secnumdepth 2
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\renewcommand{\F}{\mbox{\mathcal{F}}}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\renewcommand{\OO}{\mathcal{O}}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Pritchard
+\end_layout
+
+\begin_layout Subsection
+Notation
+\end_layout
+
+\begin_layout Itemize
+domain 
+\begin_inset Formula $D$
+\end_inset
+
+ (set)
+\end_layout
+
+\begin_layout Itemize
+collection 
+\begin_inset Formula $\F=\left\{ S_{i}\right\} _{i=1}^{k}$
+\end_inset
+
+ where 
+\begin_inset Formula $S_{i}\subseteq D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+the task is to find the extremal sets of 
+\begin_inset Formula $\F$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $N$
+\end_inset
+
+ denotes the total cardinality: 
+\begin_inset Formula $N:=\sum_{i}\left|S_{i}\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Results
+\end_layout
+
+\begin_layout Itemize
+The size of the subset graph is 
+\begin_inset Formula $\Theta\left(N^{2}/\log^{2}N\right)$
+\end_inset
+
+ in the worst case.
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $\exists c\,\forall i\;\left|S_{i}\right|\le c$
+\end_inset
+
+, then the time is 
+\begin_inset Formula $\OO\left(N\log N\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Computing the 
+\emph on
+whole subset graph
+\emph default
+ can be done in 
+\begin_inset Formula $\OO\left(N^{2}/\log N\right)$
+\end_inset
+
+ dictionary operations (the algorithm is from Yellin and Jutla).
+ The complexity of the algorithm is proven tight (but not for the problem).
+\end_layout
+
+\begin_layout Itemize
+On RAM they achieve 
+\begin_inset Formula $\OO\left(N^{2}\log\log N/\log^{2}N\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+More directly from Yellin and Jutla
+\end_layout
+
+\begin_layout Itemize
+The extremal sets can be computed in 
+\begin_inset Formula $\OO\left(mN\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $m$
+\end_inset
+
+ is the size of the result (the number of extremal sets).
+\end_layout
+
+\end_body
+\end_document

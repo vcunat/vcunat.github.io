@@ -1,0 +1,16 @@
+<area shape="rect" href="$classInterface.html#fa78e8716ee75f703eee492ce833d768" title="Works like abstractClone(), but is public and returns the correct type." alt="" coords="205,13,429,43">
+<area shape="rect" href="$classModule.html#1122f016df478b67a21bd27d8083bbaf" title="Creates a copy of module&#39;s settings (includes the whole module subtree)." alt="" coords="244,67,391,96">
+<area shape="rect" href="$classModuleFactory.html#a04f013d81baf61218167b7baccc732d" title="Returns a new instance of the module&#45;type with given id." alt="" coords="228,120,407,149">
+<area shape="rect" href="$classModule.html#fdbe57bc3861787fdebaae2ce44e3eb8" title="Concrete cloning method &#45; templated by the actual type of the module." alt="" coords="496,67,651,96">
+<area shape="rect" href="$classModule.html#70e9c083660b1f2b6f8276e99ca4d923" title="Creates or updates settings&#45;box and/or settings&#45;tree. if overridden in derived modules..." alt="" coords="736,64,891,93">
+<area shape="rect" href="$classModule.html#f398c50aa7db17f0ec2096a787141637" title="Gets an module&#45;identifier from the stream, initializes the pointer in settings with..." alt="" coords="479,209,668,239">
+<area shape="rect" href="$classSettingsDialog.html#f6952fde42b7fb67ef105589a3913695" title="Changes the contents of the settings group&#45;box when selecting in the settings tree..." alt="" coords="1212,5,1441,35">
+<area shape="rect" href="$classSettingsDialog.html#471c111d0503f4f674e99a37f2f1d526" title="Initializes the settings tree and group&#45;box contents from settings." alt="" coords="980,57,1140,87">
+<area shape="rect" href="$classSettingsDialog.html#c06c04c2fefe974cdf074f769256fcc4" title="Adjusts the settings when changed in the settings group&#45;box." alt="" coords="959,111,1161,140">
+<area shape="rect" href="$classSettingsDialog.html#b2ed34a9075e48a290c7e8111da0e836" title="Initializes all the widgets in the dialog." alt="" coords="1491,57,1688,87">
+<area shape="rect" href="$classSettingsDialog.html#ae84370afbad110420abe32a6906c17e" title="Handles loading and saving of the settings." alt="" coords="1229,109,1424,139">
+<area shape="rect" href="$classModule.html#14e916b29b4ab3e5d9b5a769797eb392" title="Loads all the settings, icluding child modules (and their settings)." alt="" coords="723,156,904,185">
+<area shape="rect" href="$classMRoot.html#0687291b4a850f7507210efb256771fa" title="Loads image from a file &#45; returns true on success (to be run on in Clear state),..." alt="" coords="745,209,881,239">
+<area shape="rect" href="$classMStdEncoder.html#ffa5e17525037f968ac3624071361520" title="Read all settings, opposite to writeSettings." alt="" coords="724,263,903,292">
+<area shape="rect" href="$classMSquarePixels.html#2c7762e6f685375284784d16023af621" title="Reads settings (shared by all jobs) needed for reconstruction from a stream &#45; needs..." alt="" coords="719,316,908,345">
+<area shape="rect" href="$structIRoot.html#6733ebffc59c3b08eb4e12c0d63d03fb" title="Loads all settings from a file (to be run on a shallow module), returns true on success..." alt="" coords="975,164,1145,193">

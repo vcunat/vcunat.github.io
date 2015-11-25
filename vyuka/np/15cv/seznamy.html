@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - seznamy</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% setrideny(S)</span>
+setrideny([])<span class="kw">.</span>
+setrideny([<span class="dt">_</span>])<span class="kw">.</span>
+setrideny([<span class="dt">A</span>,<span class="dt">B</span><span class="fu">|</span><span class="dt">C</span>]) <span class="kw">:-</span> <span class="dt">A=&lt;B</span><span class="kw">,</span> setrideny([<span class="dt">B</span><span class="fu">|</span><span class="dt">C</span>])<span class="kw">.</span>
+
+
+
+<span class="co">% predikat backtrackujici pres vsechny permutace</span>
+<span class="co">% (kazda moznost prave jednou,</span>
+<span class="co">%  prvky vstupu povazujeme za ruzne)</span>
+<span class="co">%permut(+Seznam, -PermutovanySeznam)</span>
+permut([]<span class="kw">,</span> [])<span class="kw">.</span>
+permut(<span class="dt">L</span><span class="kw">,</span> [<span class="dt">X</span><span class="fu">|</span><span class="dt">P</span>]) <span class="kw">:-</span> select2(<span class="dt">X</span><span class="kw">,</span> <span class="dt">L</span><span class="kw">,</span> <span class="dt">R</span>)<span class="kw">,</span> permut(<span class="dt">R</span><span class="kw">,</span> <span class="dt">P</span>)<span class="kw">.</span>
+
+select2(<span class="dt">X</span><span class="kw">,</span>[<span class="dt">X</span><span class="fu">|</span><span class="dt">V</span>]<span class="kw">,</span><span class="dt">V</span>)<span class="kw">.</span>
+select2(<span class="dt">X</span><span class="kw">,</span>[<span class="dt">P</span><span class="fu">|</span><span class="dt">Z</span>]<span class="kw">,</span>[<span class="dt">P</span><span class="fu">|</span><span class="dt">V</span>]) <span class="kw">:-</span> select2(<span class="dt">X</span><span class="kw">,</span><span class="dt">Z</span><span class="kw">,</span><span class="dt">V</span>)<span class="kw">.</span>
+
+
+<span class="co">%% Cil: mergesort</span>
+
+<span class="co">% split2(+List, -Odd, -Even)</span>
+split2([]<span class="kw">,</span> []<span class="kw">,</span> [])<span class="kw">.</span>
+split2([<span class="dt">H</span>]<span class="kw">,</span> [<span class="dt">H</span>]<span class="kw">,</span> [])<span class="kw">.</span>
+split2([<span class="dt">H</span>,<span class="dt">I</span><span class="fu">|</span><span class="dt">T</span>]<span class="kw">,</span> [<span class="dt">H</span><span class="fu">|</span><span class="dt">O</span>]<span class="kw">,</span> [<span class="dt">I</span><span class="fu">|</span><span class="dt">E</span>]) <span class="kw">:-</span> split2(<span class="dt">T</span><span class="kw">,</span> <span class="dt">O</span><span class="kw">,</span> <span class="dt">E</span>)<span class="kw">.</span>
+
+<span class="co">% merdz(+List1, +List2, -List)</span>
+merdz(<span class="dt">L</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">L</span>)<span class="kw">.</span>
+merdz([]<span class="kw">,</span> <span class="dt">L</span><span class="kw">,</span> <span class="dt">L</span>)<span class="kw">.</span>
+merdz([<span class="dt">H1</span><span class="fu">|</span><span class="dt">T1</span>]<span class="kw">,</span>[<span class="dt">H2</span><span class="fu">|</span><span class="dt">T2</span>]<span class="kw">,</span>[<span class="dt">H1</span><span class="fu">|</span><span class="dt">T</span>]) <span class="kw">:-</span> <span class="dt">H1&lt;H2</span><span class="kw">,</span> merdz(<span class="dt">T1</span><span class="kw">,</span>[<span class="dt">H2</span><span class="fu">|</span><span class="dt">T2</span>]<span class="kw">,</span><span class="dt">T</span>)<span class="kw">.</span>
+merdz([<span class="dt">H1</span><span class="fu">|</span><span class="dt">T1</span>]<span class="kw">,</span>[<span class="dt">H2</span><span class="fu">|</span><span class="dt">T2</span>]<span class="kw">,</span>[<span class="dt">H2</span><span class="fu">|</span><span class="dt">T</span>]) <span class="kw">:-</span> <span class="dt">H2=&lt;H1</span><span class="kw">,</span> merdz([<span class="dt">H1</span><span class="fu">|</span><span class="dt">T1</span>]<span class="kw">,</span><span class="dt">T2</span><span class="kw">,</span><span class="dt">T</span>)<span class="kw">.</span>
+
+<span class="co">% mergesort(+Vstup, -Vystup)</span>
+mergesort([]<span class="kw">,</span> [])<span class="kw">.</span>
+mergesort([<span class="dt">X</span>]<span class="kw">,</span>[<span class="dt">X</span>])<span class="kw">.</span> <span class="co">% vvv obrana proti cykleni</span>
+mergesort(<span class="dt">X</span><span class="kw">,</span> <span class="dt">Y</span>) <span class="kw">:-</span> <span class="dt">X</span><span class="kw">=</span>[<span class="dt">_</span>,<span class="dt">_</span><span class="fu">|</span><span class="dt">_</span>]<span class="kw">,</span> split2(<span class="dt">X</span><span class="kw">,</span> <span class="dt">X1</span><span class="kw">,</span> <span class="dt">X2</span>)<span class="kw">,</span>
+	mergesort(<span class="dt">X1</span><span class="kw">,</span><span class="dt">Y1</span>)<span class="kw">,</span> mergesort(<span class="dt">X2</span><span class="kw">,</span><span class="dt">Y2</span>)<span class="kw">,</span>
+	merdz(<span class="dt">Y1</span><span class="kw">,</span><span class="dt">Y2</span><span class="kw">,</span><span class="dt">Y</span>)<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span> append(<span class="dt">A</span><span class="kw">,</span><span class="dt">B</span><span class="kw">,</span>[<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>])<span class="kw">.</span>
+<span class="dt">A</span> <span class="kw">=</span> []<span class="kw">,</span>
+<span class="dt">B</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">A</span> <span class="kw">=</span> [<span class="dv">1</span>]<span class="kw">,</span>
+<span class="dt">B</span> <span class="kw">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">A</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]<span class="kw">,</span>
+<span class="dt">B</span> <span class="kw">=</span> [<span class="dv">3</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">A</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]<span class="kw">,</span>
+<span class="dt">B</span> <span class="kw">=</span> [<span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">A</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]<span class="kw">,</span>
+<span class="dt">B</span> <span class="kw">=</span> [] <span class="kw">;</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> permut([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>]<span class="kw">,</span><span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">5</span>] <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">6</span>] <span class="kw">.</span> <span class="co">% další řešení odmítnuta</span>
+
+<span class="fu">?-</span> mergesort([<span class="dv">9</span>,<span class="dv">7</span>,<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">3</span>,<span class="dv">8</span>,<span class="dv">1</span>,<span class="dv">6</span>,<span class="dv">7</span>]<span class="kw">,</span><span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">8</span>, <span class="dv">9</span>] <span class="kw">;</span>
+<span class="kw">false.</span>
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, February 27.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

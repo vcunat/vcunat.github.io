@@ -1,0 +1,698 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+\end_modules
+\maintain_unincluded_children false
+\language czech
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 1
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_title "Data Structers I - lecture contents summary"
+\pdf_author "Vladimír Čunát"
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref page
+\pdf_pdfusetitle true
+\papersize a5paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 2cm
+\columnsep 1cm
+\secnumdepth 2
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset FormulaMacro
+\newcommand{\OO}[1]{\mathcal{O}\!\left(#1\right)}
+{\mathcal{O}\left(#1\right)}
+\end_inset
+
+ 
+\begin_inset FormulaMacro
+\newcommand{\dom}[2]{\mathsf{dom}\!\left(#1,#2\right)}
+{\mathrm{dom}\left(#1,#2\right)}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Title
+Skyliny: DS (datová struktura)
+\end_layout
+
+\begin_layout Section
+Původní algoritmus
+\end_layout
+
+\begin_layout Paragraph
+Parametry:
+\end_layout
+
+\begin_layout Itemize
+prostor a konstrukční čas 
+\begin_inset Formula $\OO{n\log^{d-2}n}$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Itemize
+dotaz v
+\begin_inset space ~
+\end_inset
+
+čase 
+\begin_inset Formula $\OO{\log^{d-1}n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+vEB stromy
+\end_layout
+
+\begin_layout Standard
+Neperzistentní vEB stromy jsou klasický výsledek, jinak můžete kouknout
+ do mé 
+\begin_inset CommandInset href
+LatexCommand href
+name "diplomky"
+target "http://ktiml.ms.mff.cuni.cz/~cunat/theses/master.pdf"
+
+\end_inset
+
+.
+ Randomizovaná verze se asi lépe nahlédne v 
+\emph on
+y-fast
+\emph default
+ triích.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Předpokládáme:
+\series default
+ word-RAM se slovy délky 
+\begin_inset Formula $w$
+\end_inset
+
+, naše univerzum má velikost 
+\begin_inset Formula $N$
+\end_inset
+
+ kde prvek se vejde do konstantního počtu slov (tedy 
+\begin_inset Formula $w\in\Omega\left(\log N\right)$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Všimněte si
+\series default
+: v našem případě 
+\begin_inset Formula $N$
+\end_inset
+
+ je pouze počet bodů na vstupu, což jsme značili 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Předpokládám že v
+\begin_inset space ~
+\end_inset
+
+preprocesingu si složky vstupních vektorů porovnáváním setřídíme a očíslujeme.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Čas:
+\series default
+ na každou operaci je 
+\begin_inset Formula $\log\log N$
+\end_inset
+
+ kroků.
+ Podporované operace jsou vkládání a mazání, nejbližší prvek menší/větší
+ než dané číslo.
+ Také lze dělat průchod v 
+\begin_inset Formula $\OO 1$
+\end_inset
+
+ na krok.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Prostor
+\series default
+: deterministicky je 
+\begin_inset Formula $\OO{N\log\log N}$
+\end_inset
+
+ a myslím že se neumí výrazně lépe.
+ Randomizovaně se umí lineární ve velikosti 
+\emph on
+reprezentované
+\emph default
+ množiny (pomocí univerzálního hashování).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Konstrukce
+\series default
+: ze setříděné množiny jde (skoro určitě) v
+\begin_inset space ~
+\end_inset
+
+čase 
+\begin_inset Formula $\OO n$
+\end_inset
+
+.
+ Navíc pro naši úlohu umíme v
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\OO n$
+\end_inset
+
+ i třídit.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Závěr
+\series default
+: pro náš případ tedy není jen 
+\begin_inset Formula $\OO{\sqrt{\log n}}$
+\end_inset
+
+ na prvek, ale tedy dokonce 
+\begin_inset Formula $\OO{\log\log n}$
+\end_inset
+
+.
+ Husté univerzum v
+\begin_inset space ~
+\end_inset
+
+problému předchůdce hrozně pomáhá.
+\end_layout
+
+\begin_layout Section
+Perzistentní vEB stromy
+\end_layout
+
+\begin_layout Standard
+V perzistenci jde o
+\begin_inset space ~
+\end_inset
+
+to jak efektivně reprezentovat celou historii vývoje datové struktury.
+ Nám bude stačit varianta s
+\begin_inset space ~
+\end_inset
+
+
+\emph on
+lineární
+\emph default
+ historií.
+ Následující článek by to měl dělat, bez zhoršení asymptotických vlastností
+ (prostor je tedy lineární v
+\begin_inset space ~
+\end_inset
+
+celkovém počtu jednotkových modifikujících operací).
+ Článek jsem myslím četl a byla to pouze relativně přímočará úprava vEB
+ stromů pomocí perzistentních technik.
+\end_layout
+
+\begin_layout Standard
+Timothy M.
+ Chan: Persistent Predecessor Search and Orthogonal Point Location on the
+ Word RAM.
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "odkaz"
+target "b1 persistent P S and orthogonal point location.pdf"
+type "file:"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+SemiDynamizace
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Problém
+\series default
+: odpovídat dotaz zda zadaný bod je dominován některým z
+\begin_inset space ~
+\end_inset
+
+reprezentované množiny, budu značit predikátem 
+\begin_inset Formula $\dom Sx$
+\end_inset
+
+ (tedy platí když 
+\begin_inset Quotes eld
+\end_inset
+
+množina dominuje bod
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Předpoklady
+\series default
+: máme statickou strukturu s
+\begin_inset space ~
+\end_inset
+
+konstrukčním časem 
+\begin_inset Formula $P(d,n)$
+\end_inset
+
+, časem dotazu 
+\begin_inset Formula $Q(d,n)$
+\end_inset
+
+ a prostorem třeba 
+\begin_inset Formula $M(d,n)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Rozložitelnost:
+\series default
+ pokud množinu bodů 
+\begin_inset Formula $S$
+\end_inset
+
+ rozložíme tak že 
+\begin_inset Formula $\bigcup_{i}S_{i}=S$
+\end_inset
+
+ (ne nutně disjunktně), pak 
+\begin_inset Formula $\dom Sx\leftrightarrow\exists i\;\dom{S_{i}}x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Cíl
+\series default
+: získat semidynamickou strukturu, tedy stačí přidat vkládání.
+ Na to je klasická metoda, nejspíš Saxe a Bentley okolo 1978 (myslím si
+ že Overmars a Leeuwen až okolo 1980 přidávali silné a slabé mazání a deamortiza
+ci, 
+\begin_inset CommandInset href
+LatexCommand href
+name "odkaz"
+target "80 w-c optimal ins and del methods for decomposable S problems.pdf"
+type "file:"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Výsledek
+\series default
+: pokud se nepletu, pak prostor 
+\begin_inset Formula $\OO{M(d,n)}$
+\end_inset
+
+, dotaz 
+\begin_inset Formula $\OO{Q(d,n)\cdot\log n}$
+\end_inset
+
+ a vložení 
+\begin_inset Formula $\OO{P(d,n)\cdot\log n/n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Dohromady
+\end_layout
+
+\begin_layout Subsection
+Zatím velmi nahrubo (a možná nepravdivě)
+\end_layout
+
+\begin_layout Standard
+Dle mého odhadu bychom měli dostat strukturu s
+\begin_inset space ~
+\end_inset
+
+následujícími vlastnostmi:
+\end_layout
+
+\begin_layout Itemize
+lineární prostor (ve velikosti dat, tedy 
+\begin_inset Formula $\OO{nd}$
+\end_inset
+
+ slov),
+\end_layout
+
+\begin_layout Itemize
+konstrukce v
+\begin_inset space ~
+\end_inset
+
+čase 
+\begin_inset Formula $\OO{nd\log\log n}$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Itemize
+dotaz v
+\begin_inset space ~
+\end_inset
+
+čase 
+\begin_inset Formula $\OO{d\log\log n}$
+\end_inset
+
+ staticky nebo 
+\begin_inset Formula $\OO{d\log n\log\log n}$
+\end_inset
+
+ dynamicky.
+\end_layout
+
+\begin_layout Standard
+Navíc si myslím že vyextrahovat z
+\begin_inset space ~
+\end_inset
+
+té datové struktury skylinu také půjde, nebo minimálně by mělo jít se po
+ konstrukci zeptat na každý vstupní bod...
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+:-)
+\end_layout
+
+\begin_layout Subsection
+Induktivní konstrukce podrobněji
+\end_layout
+
+\begin_layout Standard
+Zdá se že to zdaleka nepůjde tak jednoduše (mně to od začátku přišlo podezřelé).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Předpoklad
+\series default
+: potřebujeme dynamickou a perzistentní (lineární historie) DS
+\begin_inset Formula $\left(d\right)$
+\end_inset
+
+ pro dotazy.
+ Perzistence je potřeba kvůli prostoru, na perzistenci je potřeba dynamičnost
+ DS
+\begin_inset Formula $\left(d-1\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Základ
+\series default
+: DS
+\begin_inset Formula $\left(2\right)$
+\end_inset
+
+ je samotný perzistentní vEB strom.
+ Dynamičnost a perzistence je potřeba pouze kvůli indukci.
+ Prostor je 
+\begin_inset Formula $\OO n$
+\end_inset
+
+, čas 
+\begin_inset Formula $\OO{\log\log n}$
+\end_inset
+
+ na operaci.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Note Greyedout
+status open
+
+\begin_layout Plain Layout
+obecný indukční krok bude potřeba udělat bez asympotické notace, s
+\begin_inset space ~
+\end_inset
+
+pojmenovanými konstantami
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+DS
+\begin_inset Formula $\left(3\right)$
+\end_inset
+
+ je sekvence upravovaných DS
+\begin_inset Formula $\left(2\right)$
+\end_inset
+
+, indexovaných dalším vEB stromem dle přidané souřadnice.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Statickou DS
+\begin_inset Formula $\left(3\right)$
+\end_inset
+
+ tedy máme v
+\begin_inset space ~
+\end_inset
+
+prostoru 
+\begin_inset Formula $\OO n$
+\end_inset
+
+ a čase 
+\begin_inset Formula $\OO{\log\log n}$
+\end_inset
+
+ na dotaz.
+\end_layout
+
+\begin_layout Itemize
+Po dynamizaci se dostaneme na časy pro dotaz 
+\begin_inset Formula $\OO{\log n\log\log n}$
+\end_inset
+
+ a pro vložení 
+\begin_inset Formula $\OO{\log n}$
+\end_inset
+
+.
+ Prostor by měl být 
+\begin_inset Formula $\OO n$
+\end_inset
+
+ plus 
+\begin_inset Formula $\OO{\log n}$
+\end_inset
+
+ za každou perzistentní modifikaci.
+ (Bohužel.
+ Možná že to půjde vylepšit nějakou jinou perzistentně-dynamizační konstrukcí,
+ ty koncepty k sobě mají blízko.) 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+DS
+\begin_inset Formula $\left(4\right)$
+\end_inset
+
+ je sekvence upravovaných DS
+\begin_inset Formula $\left(3\right)$
+\end_inset
+
+, indexovaných dalším vEB stromem dle přidané souřadnice.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Statická DS
+\begin_inset Formula $\left(4\right)$
+\end_inset
+
+ má dotaz v
+\begin_inset space ~
+\end_inset
+
+čase 
+\begin_inset Formula $\OO{\log n\log\log n}$
+\end_inset
+
+, čas konstrukce a prostor je 
+\begin_inset Formula $\OO{n\log n}$
+\end_inset
+
+.
+ Srovnání: původně byl prostor 
+\begin_inset Formula $\OO{n\log^{2}n}$
+\end_inset
+
+ a čas dotazu 
+\begin_inset Formula $\OO{\log^{3}n}$
+\end_inset
+
+, tedy už máme slušné zlepšení (pokud někde není chyba).
+\end_layout
+
+\begin_layout Itemize
+Po dynamizaci se dostaneme na časy pro dotaz 
+\begin_inset Formula $\OO{\log^{2}n\log\log n}$
+\end_inset
+
+ a pro vložení 
+\begin_inset Formula $\OO{\log^{2}n}$
+\end_inset
+
+.
+ Prostor by měl být 
+\begin_inset Formula $\OO{n\log n}$
+\end_inset
+
+ plus odhaduju 
+\begin_inset Formula $\OO{\log^{2}n}$
+\end_inset
+
+ za každou perzistentní modifikaci.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Zdá se že náš přímočarý postup neškáluje v
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $d$
+\end_inset
+
+ tak dobře jak jsme předpokládali...
+\end_layout
+
+\end_body
+\end_document

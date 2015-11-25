@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - vyhodnocovani</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+
+
+
+p(<span class="dv">1</span>)<span class="kw">.</span>
+p(<span class="dv">2</span>) <span class="kw">:-</span> <span class="kw">!.</span>
+p(<span class="dv">3</span>)<span class="kw">.</span>
+<span class="co">% Jaké budou odpovědi na následující dotazy?</span>
+
+<span class="co">% ?- p(X).</span>
+<span class="co">% ?- p(X), p(Y).</span>
+<span class="co">% ?- p(X), !, p(Y).</span>
+
+
+
+<span class="co">% Vlastní if-then-else, odpovídající</span>
+<span class="co">%   If -&gt; Then; Else.</span>
+<span class="co">% ite(If, Then, Else)</span>
+ite(<span class="dt">I</span><span class="kw">,</span> <span class="dt">T</span><span class="kw">,</span> <span class="dt">_</span>) <span class="kw">:-</span> <span class="kw">call</span>(<span class="dt">I</span>)<span class="kw">,</span> <span class="kw">!,</span> <span class="kw">call</span>(<span class="dt">T</span>)<span class="kw">.</span>
+ite(<span class="dt">_</span><span class="kw">,</span> <span class="dt">_</span><span class="kw">,</span> <span class="dt">E</span>) <span class="kw">:-</span> <span class="kw">call</span>(<span class="dt">E</span>)<span class="kw">.</span>
+
+
+<span class="co">% Termy jsou unifikovatelné ale *nechceme* je zunifikovat</span>
+<span class="co">% uni(+T1, +T2)</span>
+uni(<span class="dt">T1</span><span class="kw">,</span> <span class="dt">T2</span>) <span class="kw">:-</span> <span class="dt">T1</span> <span class="kw">\=</span> <span class="dt">T2</span> <span class="kw">-&gt;</span> <span class="kw">fail;</span> <span class="kw">true.</span>
+
+uni2(<span class="dt">T1</span><span class="kw">,</span> <span class="dt">T2</span>) <span class="kw">:-</span> <span class="kw">\+</span> <span class="dt">T1</span> <span class="kw">\=</span> <span class="dt">T2</span><span class="kw">.</span>
+
+uni3(<span class="dt">T1</span><span class="kw">,</span> <span class="dt">T2</span>) <span class="kw">:-</span> <span class="dt">T1</span> <span class="kw">\=</span> <span class="dt">T2</span><span class="kw">,</span> <span class="kw">!,</span> <span class="kw">fail.</span>
+uni3(<span class="dt">_</span><span class="kw">,</span> <span class="dt">_</span>)<span class="kw">.</span>
+
+uni4(<span class="dt">T1</span><span class="kw">,</span> <span class="dt">_</span>) <span class="kw">:-</span> <span class="dt">var</span>(<span class="dt">T1</span>)<span class="kw">,</span> <span class="kw">!.</span>
+uni4(<span class="dt">_</span><span class="kw">,</span> <span class="dt">T2</span>) <span class="kw">:-</span> <span class="dt">var</span>(<span class="dt">T2</span>)<span class="kw">,</span> <span class="kw">!.</span>
+uni4(<span class="dt">T1</span><span class="kw">,</span> <span class="dt">T2</span>) <span class="kw">:-</span> <span class="dt">T1</span> <span class="fu">=..</span> [<span class="dt">F</span><span class="fu">|</span><span class="dt">L1</span>]<span class="kw">,</span> <span class="dt">T2</span> <span class="fu">=..</span> [<span class="dt">F</span><span class="fu">|</span><span class="dt">L2</span>]<span class="kw">,</span> zip(<span class="dt">L1</span><span class="kw">,</span> <span class="dt">L2</span>)<span class="kw">.</span>
+
+zip([]<span class="kw">,</span> [])<span class="kw">.</span>
+zip([<span class="dt">H1</span><span class="fu">|</span><span class="dt">L1</span>]<span class="kw">,</span> [<span class="dt">H2</span><span class="fu">|</span><span class="dt">L2</span>]) <span class="kw">:-</span> uni4(<span class="dt">H1</span><span class="kw">,</span> <span class="dt">H2</span>)<span class="kw">,</span> zip(<span class="dt">L1</span><span class="kw">,</span> <span class="dt">L2</span>)<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="fu">?-</span> p(<span class="dt">X</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">1</span> <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">.</span>
+
+<span class="fu">?-</span> p(<span class="dt">X</span>)<span class="kw">,</span> p(<span class="dt">Y</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dt">Y</span><span class="kw">,</span> <span class="dt">Y</span> <span class="kw">=</span> <span class="dv">1</span> <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">1</span><span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> <span class="dv">2</span> <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> <span class="dv">1</span> <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dt">Y</span><span class="kw">,</span> <span class="dt">Y</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">.</span>
+
+<span class="fu">?-</span> p(<span class="dt">X</span>)<span class="kw">,</span> <span class="kw">!,</span> p(<span class="dt">Y</span>)<span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dt">Y</span><span class="kw">,</span> <span class="dt">Y</span> <span class="kw">=</span> <span class="dv">1</span> <span class="kw">;</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">1</span><span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">.</span>
+
+<span class="fu">?-</span> p(<span class="dt">W</span>)<span class="kw">,</span> p(<span class="dt">X</span>)<span class="kw">,</span> <span class="kw">!,</span> p(<span class="dt">Y</span>)<span class="kw">.</span>
+<span class="dt">W</span> <span class="kw">=</span> <span class="dt">X</span><span class="kw">,</span> <span class="dt">X</span> <span class="kw">=</span> <span class="dt">Y</span><span class="kw">,</span> <span class="dt">Y</span> <span class="kw">=</span> <span class="dv">1</span> <span class="kw">;</span>
+<span class="dt">W</span> <span class="kw">=</span> <span class="dt">X</span><span class="kw">,</span> <span class="dt">X</span> <span class="kw">=</span> <span class="dv">1</span><span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">.</span>
+
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April  9.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

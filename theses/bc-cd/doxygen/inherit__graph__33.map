@@ -1,0 +1,9 @@
+<area shape="rect" href="$structMatrixWalkers_1_1RotBase.html" title="MatrixWalkers::RotBase\&lt; T, I \&gt;" alt="" coords="5,192,211,221">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__0.html" title="No rotation: x&#45;&gt;, y&#45;&gt;." alt="" coords="267,5,483,35">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__0__T.html" title="No rotation, transposed: y&#45;&gt;, x&#45;&gt;." alt="" coords="259,59,491,88">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__1.html" title="Rotated 90deg\\." alt="" coords="267,112,483,141">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__1__T.html" title="Rotated 90deg\\." alt="" coords="259,165,491,195">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__2.html" title="Rotated 180deg\\." alt="" coords="267,219,483,248">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__2__T.html" title="Rotated 180deg\\." alt="" coords="259,272,491,301">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__3.html" title="Rotated 270deg\\." alt="" coords="267,325,483,355">
+<area shape="rect" href="$structMatrixWalkers_1_1Rotation__3__T.html" title="Rotated 270deg\\." alt="" coords="259,379,491,408">

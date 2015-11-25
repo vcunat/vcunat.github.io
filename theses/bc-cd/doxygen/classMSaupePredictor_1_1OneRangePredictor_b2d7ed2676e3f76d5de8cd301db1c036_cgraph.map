@@ -1,0 +1,5 @@
+<area shape="rect" href="$classKDTree_1_1PointHeap.html#5844f5ca3bedef5690b0e7fb53397532" title="Returns the SE of the top node (always equals the SE of the next leaf)." alt="" coords="420,5,615,35">
+<area shape="rect" href="$util_8h.html#97975b87cbe19485ff0af12d5972f54e" title="Returns ceil(log2(i))." alt="" coords="485,59,549,88">
+<area shape="rect" href="$structMatrixSlice.html#ffa2c04d87edb25db7e0c57a40313670" title="Creates an instance with pre&#45;filled member fields." alt="" coords="441,112,593,141">
+<area shape="rect" href="$namespaceFieldMath.html#0c43d84cae0936059f8c31ebd1090ffc" title="Calls transformer(x,y) for every x from [i1;iEnd1) and corresponding y from [i2;..." alt="" coords="444,165,591,195">
+<area shape="rect" href="$classKDTree_1_1PointHeap.html#8ca1b5fdfefcd6a14d0cc198d26fe781" title="Returns whether the heap is empty ( !isEmpty() is needed for all other methods)." alt="" coords="665,5,849,35">

@@ -1,0 +1,21 @@
+<area shape="rect" href="$structSummedMatrix.html" title="SummedPixels" alt="" coords="1473,113,1583,143">
+<area shape="rect" href="$structMatrixSummer.html" title="MatrixSummer\&lt; BSumRes, PtrInt \&gt;" alt="" coords="723,93,952,123">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; BSumRes, PtrInt \&gt;" alt="" coords="319,63,527,92">
+<area shape="rect" href="$structMatrixSlice.html" title="A simple generic template for matrices of fixed size, uses shallow copying and manual..." alt="" coords="11,133,141,163">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; SReal \&gt;" alt="" coords="553,5,697,35">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; BSumRes, I \&gt;" alt="" coords="332,185,513,215">
+<area shape="rect" href="$structMatrixSlice.html" title="MatrixSlice\&lt; PixT \&gt;" alt="" coords="557,239,693,268">
+<area shape="rect" href="$structMatrixSummer.html" title="MatrixSummer objects store partial sums of a matrix, allowing quick computation of..." alt="" coords="348,121,497,151">
+<area shape="rect" href="$structMatrixSummer.html" title="MatrixSummer\&lt; BSumRes, I \&gt;" alt="" coords="737,155,937,184">
+<area shape="rect" href="$structSummedMatrix.html" title="Structure for a block of pixels &#45; also contains summers and dimensions." alt="" coords="1112,156,1328,185">
+<area shape="rect" href="$structDoubleNum.html" title="Helper structure for computing with value and squared sums at once." alt="" coords="7,287,145,316">
+<area shape="rect" href="$structISquareDomains.html" title="Interface for modules deciding what will square domain blocks look like." alt="" coords="1469,308,1587,337">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareDomains \&gt;" alt="" coords="1124,308,1316,337">
+<area shape="rect" href="$classModule.html" title="A common base class for all modules." alt="" coords="391,480,455,509">
+<area shape="rect" href="$structModule_1_1SettingItem.html" title="Represents one setting value in a module." alt="" coords="744,593,931,623">
+<area shape="rect" href="$classInterface.html" title="A base class for all interfaces, parametrized by the interface&#39;s type." alt="" coords="775,381,900,411">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareEncoder \&gt;" alt="" coords="1127,361,1313,391">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareRanges \&gt;" alt="" coords="1128,415,1312,444">
+<area shape="rect" href="$unionModule_1_1SettingValue.html" title="Represents one setting &#45; one number, real or integer." alt="" coords="325,643,520,672">
+<area shape="rect" href="$structISquareEncoder.html" title="Interface for square encoders &#45; maintaining mappings from square domains to square..." alt="" coords="1472,361,1584,391">
+<area shape="rect" href="$structISquareRanges.html" title="Interface for modules that control how the image will be split into rectangular (mostly..." alt="" coords="1473,415,1583,444">

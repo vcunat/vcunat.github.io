@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - du-podstromy</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% Transformujte binární strom s číselnými klíči</span>
+<span class="co">%  (nemusí být vyhledávací, ale tvar zase podle strom/1)</span>
+<span class="co">%  tak, že tvar zůstane stejný, ale hodnota klíče vrcholu</span>
+<span class="co">%  bude průměrem hodnot původních klíčů v podstromu vrcholu.</span>
+<span class="co">% Bodování: 1.6 bodu za lineání řešení,</span>
+<span class="co">%  za pomalejší (pro libovolný tvar stromu) maximálně 0.8.</span>
+
+<span class="co">% oznac(+Strom, -Strom)</span>
+
+oznac(<span class="dt">S1</span><span class="kw">,</span> <span class="dt">S2</span>) <span class="kw">:-</span> oznac(<span class="dt">S1</span><span class="kw">,</span> <span class="dt">S2</span><span class="kw">,</span> <span class="dt">_</span><span class="kw">,</span> <span class="dt">_</span>)<span class="kw">.</span>
+<span class="co">%oznac(+Strom, -Strom, -PočetVrcholů, -Součet)</span>
+oznac(list<span class="kw">,</span> list<span class="kw">,</span> <span class="dv">0</span><span class="kw">,</span> <span class="dv">0</span>)<span class="kw">.</span>
+oznac(uzel(<span class="dt">L1</span><span class="kw">,</span> <span class="dt">H</span><span class="kw">,</span> <span class="dt">P1</span>)<span class="kw">,</span> uzel(<span class="dt">L2</span><span class="kw">,</span> <span class="dt">Prumer</span><span class="kw">,</span> <span class="dt">P2</span>)<span class="kw">,</span> <span class="dt">Pocet</span><span class="kw">,</span> <span class="dt">Soucet</span>) <span class="kw">:-</span>
+	oznac(<span class="dt">L1</span><span class="kw">,</span> <span class="dt">L2</span><span class="kw">,</span> <span class="dt">PocetL</span><span class="kw">,</span> <span class="dt">SoucetL</span>)<span class="kw">,</span>
+	oznac(<span class="dt">P1</span><span class="kw">,</span> <span class="dt">P2</span><span class="kw">,</span> <span class="dt">PocetP</span><span class="kw">,</span> <span class="dt">SoucetP</span>)<span class="kw">,</span>
+	<span class="dt">Pocet</span> <span class="dt">is</span> <span class="dt">PocetL+PocetP</span><span class="dv">+1</span><span class="kw">,</span>
+	<span class="dt">Soucet</span> <span class="dt">is</span> <span class="dt">SoucetL+SoucetP+H</span><span class="kw">,</span>
+	<span class="dt">Prumer</span> <span class="dt">is</span> <span class="dt">Soucet</span><span class="fl">/</span><span class="dt">Pocet</span><span class="kw">.</span>
+
+
+strom(list)<span class="kw">.</span>
+strom(uzel(<span class="dt">L</span><span class="kw">,</span> <span class="dt">K</span><span class="kw">,</span> <span class="dt">P</span>)) <span class="kw">:-</span> <span class="dt">number</span>(<span class="dt">K</span>)<span class="kw">,</span> strom(<span class="dt">L</span>)<span class="kw">,</span> strom(<span class="dt">P</span>)<span class="kw">.</span>
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span> <span class="dt">S</span> <span class="kw">=</span>
+  uzel(
+    uzel(uzel(list<span class="kw">,</span><span class="dv">3</span><span class="kw">,</span>list)<span class="kw">,</span> <span class="dv">5</span><span class="kw">,</span> uzel(list<span class="kw">,</span><span class="dv">2</span><span class="kw">,</span>uzel(list<span class="kw">,</span><span class="dv">4</span><span class="kw">,</span>list)))<span class="kw">,</span>
+    <span class="dv">7</span><span class="kw">,</span>
+    uzel(uzel(list<span class="kw">,</span><span class="dv">1</span><span class="kw">,</span>list)<span class="kw">,</span> <span class="dv">6</span><span class="kw">,</span> list)
+  )<span class="kw">,</span>
+  oznac(<span class="dt">S</span><span class="kw">,</span> <span class="dt">SO</span>)<span class="kw">.</span>
+<span class="dt">SO</span> <span class="kw">=</span>
+  uzel(
+    uzel(uzel(list<span class="kw">,</span><span class="dv">3</span><span class="kw">,</span>list)<span class="kw">,</span> <span class="fl">3.5</span><span class="kw">,</span> uzel(list<span class="kw">,</span><span class="dv">3</span><span class="kw">,</span>uzel(list<span class="kw">,</span><span class="dv">4</span><span class="kw">,</span>list)))<span class="kw">,</span>
+    <span class="dv">4</span><span class="kw">,</span>
+    uzel(uzel(list<span class="kw">,</span><span class="dv">1</span><span class="kw">,</span>list)<span class="kw">,</span> <span class="fl">3.5</span><span class="kw">,</span> list)
+  )<span class="kw">.</span>
+
+<span class="fu">?-</span> <span class="dt">S</span> <span class="kw">=</span> uzel(uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span>
+  uzel(list<span class="kw">,</span> <span class="dv">2</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list)))<span class="kw">,</span> <span class="dv">1</span><span class="kw">,</span>
+  uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">5</span><span class="kw">,</span> list))<span class="kw">,</span>
+  <span class="dv">7</span><span class="kw">,</span> list))<span class="kw">,</span>
+  oznac(<span class="dt">SI</span><span class="kw">,</span> <span class="dt">SO</span>)<span class="kw">.</span>
+<span class="dt">SO</span> <span class="kw">=</span> uzel(uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="fl">3.25</span><span class="kw">,</span>
+  uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list)))<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span>
+  uzel(uzel(list<span class="kw">,</span> <span class="dv">5</span><span class="kw">,</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">6</span><span class="kw">,</span> list))<span class="kw">,</span>
+  <span class="fl">5.5</span><span class="kw">,</span> list))<span class="kw">.</span></code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, April  2.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

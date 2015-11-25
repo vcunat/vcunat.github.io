@@ -1,0 +1,28 @@
+digraph G {
+	margin = 0;
+	ordering = out;
+
+	node [ shape = triangle ];
+
+	w -> { v, D };
+	v -> { u, C };
+	u -> { A, B };
+
+
+	A2 [ label=A ];
+	B2 [ label=B ];
+	C2 [ label=C ];
+	D2 [ label=D ];
+	u2 [ label=u ];
+	v2 [ label=v ];
+	w2 [ label=w ];
+	
+	u2 -> { A2; v2 };
+	v2 -> { B2; w2 };
+	w2 -> { C2; D2 };
+
+
+	u, v, w    [ shape = ellipse ];
+	u2, v2, w2 [ shape = ellipse ];
+}
+

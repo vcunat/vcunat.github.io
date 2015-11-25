@@ -1,0 +1,30 @@
+<area shape="rect" href="$classInterface.html" title="A base class for all interfaces, parametrized by the interface&#39;s type." alt="" coords="120,363,245,392">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IIntCodec \&gt;" alt="" coords="449,236,601,265">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareEncoder \&gt;" alt="" coords="432,5,619,35">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IQuality2SE \&gt;" alt="" coords="443,348,608,377">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareDomains \&gt;" alt="" coords="429,68,621,97">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IShapeTransformer \&gt;" alt="" coords="423,164,628,193">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IRoot \&gt;" alt="" coords="461,425,589,455">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IStdEncPredictor \&gt;" alt="" coords="428,493,623,523">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; IColorTransformer \&gt;" alt="" coords="425,692,625,721">
+<area shape="rect" href="$classInterface.html" title="Interface\&lt; ISquareRanges \&gt;" alt="" coords="433,600,617,629">
+<area shape="rect" href="$structIIntCodec.html" title="Integer sequences (de)coder interface." alt="" coords="708,236,785,265">
+<area shape="rect" href="$classMDifferentialVLICodec.html" title="Variable&#45;length&#45;integer codec optimized for encoding little&#45;changing sequences." alt="" coords="864,236,1016,265">
+<area shape="rect" href="$structISquareEncoder.html" title="Interface for square encoders &#45; maintaining mappings from square domains to square..." alt="" coords="691,5,803,35">
+<area shape="rect" href="$classMStdEncoder.html" title="Standard square encoder &#45; uses affine color transformation for one&#45;domain to one&#45;range..." alt="" coords="891,5,989,35">
+<area shape="rect" href="$structIQuality2SE.html" title="Interface for modules deciding how the max. SE will depend on block size (parametrized..." alt="" coords="701,348,792,377">
+<area shape="rect" href="$classMQuality2SE__alt.html" title="Alternate quality&#45;to&#45;SE module &#45; uses fixed MSE for all block sizes." alt="" coords="880,313,1000,343">
+<area shape="rect" href="$classMQuality2SE__std.html" title="Standard quality&#45;to&#45;SE module &#45; uses fixed SE for all block sizes." alt="" coords="879,367,1001,396">
+<area shape="rect" href="$structISquareDomains.html" title="Interface for modules deciding what will square domain blocks look like." alt="" coords="688,68,805,97">
+<area shape="rect" href="$classMStdDomains.html" title="Standard domain&#45;pool generator." alt="" coords="888,68,992,97">
+<area shape="rect" href="$structIShapeTransformer.html" title="Interface for modules handling pixel&#45;shape changes and/or splitting the single&#45;color..." alt="" coords="681,164,812,193">
+<area shape="rect" href="$classMSquarePixels.html" title="A simple shape transformer using square pixels." alt="" coords="885,164,995,193">
+<area shape="rect" href="$structIRoot.html" title="Interface for root modules (with only one implementation MRoot), all modules are..." alt="" coords="721,425,772,455">
+<area shape="rect" href="$classMRoot.html" title="The root module implementation." alt="" coords="911,425,969,455">
+<area shape="rect" href="$structIStdEncPredictor.html" title="Interface for domain&#45;range mapping predictor generator for MStdEncoder." alt="" coords="687,493,807,523">
+<area shape="rect" href="$classMNoPredictor.html" title="Predictor that doesn&#39;t predict, just tries all the domains." alt="" coords="891,541,989,571">
+<area shape="rect" href="$classMSaupePredictor.html" title="Predictor for MStdEncoder based on a theorem proven in Saupe&#39;s work." alt="" coords="880,488,1000,517">
+<area shape="rect" href="$structIColorTransformer.html" title="Interface for modules performing color transformations, following modules always..." alt="" coords="685,692,808,721">
+<area shape="rect" href="$classMColorModel.html" title="Simple color transformer for affine models." alt="" coords="892,692,988,721">
+<area shape="rect" href="$structISquareRanges.html" title="Interface for modules that control how the image will be split into rectangular (mostly..." alt="" coords="692,600,801,629">
+<area shape="rect" href="$classMQuadTree.html" title="Module dividing range blocks with a quad&#45;tree." alt="" coords="896,600,984,629">

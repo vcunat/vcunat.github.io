@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - du-stromy</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div class="level2"><h1>Zdroj</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+
+<span class="co">% Domaci ukol: konstrukce BVS ze seznamu.</span>
+<span class="co">% uzel(L,klic,P) nebo list</span>
+<span class="co">% Vysledny strom musi mit optimalni vysku (alespon asymptoticky).</span>
+<span class="co">% Muzete pouzit sort(+Seznam, -Setrideny).</span>
+<span class="co">% Bodovani: O(n log n) za 1.5 bodu, linearni za 2.</span>
+<span class="co">% (zde jeden sort nepocitam do slozitosti)</span>
+<span class="co">% Aritmetika ani akumulatory nejsou potreba, ale nevadi.</span>
+<span class="co">%</span>
+<span class="co">% seznam2strom(+Seznam, -Strom)</span>
+
+
+<span class="co">% trideni byla primocara cast</span>
+seznam2strom(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Strom</span>) <span class="kw">:-</span>
+	sort(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">SezS</span>)<span class="kw">,</span>
+	s2s(<span class="dt">SezS</span><span class="kw">,</span> <span class="dt">Strom</span>)<span class="kw">.</span>
+
+
+<span class="co">% Reseni 1: linearne-logaritmicky to slo snadno,</span>
+<span class="co">% 	stacilo rozpulit seznam a pouzit rekurzi.</span>
+s2s([]<span class="kw">,</span> list)<span class="kw">.</span>
+s2s(<span class="dt">Sez</span><span class="kw">,</span> uzel(<span class="dt">L</span><span class="kw">,</span><span class="dt">Med</span><span class="kw">,</span><span class="dt">P</span>)) <span class="kw">:-</span>
+	median(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">SezL</span><span class="kw">,</span> <span class="dt">Med</span><span class="kw">,</span> <span class="dt">SezP</span>)<span class="kw">,</span>
+	s2s(<span class="dt">SezL</span><span class="kw">,</span> <span class="dt">L</span>)<span class="kw">,</span> s2s(<span class="dt">SezP</span><span class="kw">,</span> <span class="dt">P</span>)<span class="kw">.</span>
+
+<span class="co">% median(+Seznam, -LevaPulka, -Median, -Zbytek)</span>
+<span class="co">% 	v teto implementaci: suda delka dela levy seznam delsi</span>
+median(<span class="dt">S</span><span class="kw">,</span> <span class="dt">Lev</span><span class="kw">,</span> <span class="dt">Med</span><span class="kw">,</span> <span class="dt">Prav</span>) <span class="kw">:-</span> m(<span class="dt">S</span><span class="kw">,</span> <span class="dt">S</span><span class="kw">,</span> <span class="dt">Lev</span><span class="kw">,</span> [<span class="dt">Med</span><span class="fu">|</span><span class="dt">Prav</span>])<span class="kw">.</span>
+<span class="co">% m(+A, +B, -L, -P)</span>
+<span class="co">% Rozdeli B do L a P: delka L je polovina delky A</span>
+m([<span class="dt">_</span>,<span class="dt">_</span><span class="fu">|</span><span class="dt">A</span>]<span class="kw">,</span> [<span class="dt">B1</span><span class="fu">|</span><span class="dt">B</span>]<span class="kw">,</span> [<span class="dt">B1</span><span class="fu">|</span><span class="dt">L</span>]<span class="kw">,</span> <span class="dt">P</span>) <span class="kw">:-</span> m(<span class="dt">A</span><span class="kw">,</span> <span class="dt">B</span><span class="kw">,</span> <span class="dt">L</span><span class="kw">,</span> <span class="dt">P</span>)<span class="kw">.</span>
+m([<span class="dt">_</span>]<span class="kw">,</span> <span class="dt">P</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">P</span>)<span class="kw">.</span> <span class="co">% lichou delku A zaokrouhlime dolu</span>
+m([]<span class="kw">,</span> <span class="dt">Prav</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">Prav</span>)<span class="kw">.</span>
+
+
+<span class="co">% Reseni 2: linearne pomoci iterativni redukce seznamu</span>
+
+<span class="co">% liche_klice(+S, -T)</span>
+<span class="co">% 	v seznamu klicu S: liche klice K zmenime v uzel(list,K,list)</span>
+liche_klice([<span class="dt">K1</span>,<span class="dt">K2</span><span class="fu">|</span><span class="dt">S</span>]<span class="kw">,</span> [uzel(list<span class="kw">,</span><span class="dt">K1</span><span class="kw">,</span>list),<span class="dt">K2</span><span class="fu">|</span><span class="dt">T</span>]) <span class="kw">:-</span>
+	liche_klice(<span class="dt">S</span><span class="kw">,</span> <span class="dt">T</span>)<span class="kw">.</span>
+liche_klice([<span class="dt">K</span>]<span class="kw">,</span> [uzel(list<span class="kw">,</span><span class="dt">K</span><span class="kw">,</span>list)])<span class="kw">.</span>
+liche_klice([]<span class="kw">,</span> [])<span class="kw">.</span>
+
+<span class="co">% liche prvky jsou stromy, sude jsou klice</span>
+<span class="co">% 	sparujeme liche klice se sousednimi stromy</span>
+<span class="co">% 	a sude klice nechame byt</span>
+spoj_stromy([<span class="dt">S1</span>,<span class="dt">K1</span>,<span class="dt">S2</span>,<span class="dt">K2</span><span class="fu">|</span><span class="dt">S</span>]<span class="kw">,</span> [uzel(<span class="dt">S1</span><span class="kw">,</span><span class="dt">K1</span><span class="kw">,</span><span class="dt">S2</span>),<span class="dt">K2</span><span class="fu">|</span><span class="dt">T</span>]) <span class="kw">:-</span>
+	spoj_stromy(<span class="dt">S</span><span class="kw">,</span> <span class="dt">T</span>)<span class="kw">.</span>
+spoj_stromy([<span class="dt">S1</span>,<span class="dt">K1</span>,<span class="dt">S2</span>]<span class="kw">,</span> [uzel(<span class="dt">S1</span><span class="kw">,</span><span class="dt">K1</span><span class="kw">,</span><span class="dt">S2</span>)])<span class="kw">.</span>
+<span class="co">% ted nepekne delky</span>
+spoj_stromy([<span class="dt">S1</span>,<span class="dt">K1</span>]<span class="kw">,</span> [uzel(<span class="dt">S1</span><span class="kw">,</span><span class="dt">K1</span><span class="kw">,</span>list)])<span class="kw">.</span>
+spoj_stromy([<span class="dt">S1</span>]<span class="kw">,</span> [<span class="dt">S1</span>])<span class="kw">.</span>
+spoj_stromy([]<span class="kw">,</span> [])<span class="kw">.</span>
+
+<span class="co">% spoj_stromy(+SeznamKlicu, -Strom)</span>
+<span class="co">% 	poradi klicu se nemeni, +Seznam je neprazdny</span>
+spojuj_stromy(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Strom</span>) <span class="kw">:-</span> spoj_stromy(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Sez2</span>)<span class="kw">,</span>
+	(<span class="dt">Sez2</span> <span class="kw">=</span> [<span class="dt">Strom</span>]<span class="kw">;</span> <span class="dt">Sez2</span> <span class="kw">=</span> [<span class="dt">_</span>,<span class="dt">_</span><span class="fu">|</span><span class="dt">_</span>]<span class="kw">,</span> spojuj_stromy(<span class="dt">Sez2</span><span class="kw">,</span> <span class="dt">Strom</span>))<span class="kw">.</span>
+s2s_2(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Strom</span>) <span class="kw">:-</span>
+	liche_klice(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Sez2</span>)<span class="kw">,</span> spojuj_stromy(<span class="dt">Sez2</span><span class="kw">,</span> <span class="dt">Strom</span>)<span class="kw">.</span>
+
+
+<span class="co">% Reseni 3: linearne pomoci aritmetiky</span>
+seznam2strom_3(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Strom</span>) <span class="kw">:-</span>
+	sort(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">SezS</span>)<span class="kw">,</span>
+	length(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Delka</span>)<span class="kw">,</span>
+	s2s_3(<span class="dt">SezS</span><span class="kw">,</span> <span class="dt">Delka</span><span class="kw">,</span> []<span class="kw">,</span> <span class="dt">Strom</span>)<span class="kw">.</span>
+
+<span class="co">% s2s_3(+SetridenySeznam, +DelkaKPouziti, -ZbytekSeznamu, -Strom)</span>
+s2s_3(<span class="dt">S</span><span class="kw">,</span> <span class="dv">0</span><span class="kw">,</span> <span class="dt">S</span><span class="kw">,</span> list)<span class="kw">.</span>
+s2s_3(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">Del</span><span class="kw">,</span> <span class="dt">Zb</span><span class="kw">,</span> uzel(<span class="dt">StrL</span><span class="kw">,</span> <span class="dt">Koren</span><span class="kw">,</span> <span class="dt">StrP</span>)) <span class="kw">:-</span>
+	<span class="dt">Del</span> <span class="dt">&gt;</span> <span class="dv">0</span><span class="kw">,</span> <span class="co">% proti cykleni</span>
+	<span class="co">% pokud DelL je sude, jsou dve moznosti</span>
+	(	<span class="dt">DelL</span> <span class="dt">is</span> <span class="dt">Del</span><span class="dv">//2</span><span class="kw">;</span>
+		<span class="dt">Del</span> <span class="fu">mod</span> <span class="dv">2</span> <span class="dt">=:=</span><span class="dv">0</span><span class="kw">,</span> <span class="dt">DelL</span> <span class="dt">is</span> <span class="dt">Del</span><span class="dv">//2-1</span> )<span class="kw">,</span>
+	s2s_3(<span class="dt">Sez</span><span class="kw">,</span> <span class="dt">DelL</span><span class="kw">,</span> [<span class="dt">Koren</span><span class="fu">|</span><span class="dt">SezP</span>]<span class="kw">,</span> <span class="dt">StrL</span>)<span class="kw">,</span>
+	<span class="dt">DelP</span> <span class="dt">is</span> <span class="dt">Del-DelL</span><span class="dv">-1</span><span class="kw">,</span>
+	s2s_3(<span class="dt">SezP</span><span class="kw">,</span> <span class="dt">DelP</span><span class="kw">,</span> <span class="dt">Zb</span><span class="kw">,</span> <span class="dt">StrP</span>)<span class="kw">.</span>
+
+</code></pre> </div>  <div class="level2"><h1>Dotazy</h1> 
+<pre class="sourceCode prolog"><code class="sourceCode prolog">
+<span class="fu">?-</span> seznam2strom([<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">5</span>,<span class="dv">4</span>]<span class="kw">,</span> <span class="dt">Strom</span>)<span class="kw">.</span>
+<span class="dt">Strom</span> <span class="kw">=</span> uzel(uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list)<span class="kw">,</span>
+	<span class="dv">5</span><span class="kw">,</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">9</span><span class="kw">,</span> list)) <span class="kw">;</span>
+<span class="dt">Strom</span> <span class="kw">=</span> uzel(uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list)<span class="kw">,</span>
+	<span class="dv">5</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">9</span><span class="kw">,</span> list))) <span class="kw">;</span>
+<span class="dt">Strom</span> <span class="kw">=</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list))<span class="kw">,</span>
+	<span class="dv">5</span><span class="kw">,</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> list)<span class="kw">,</span> <span class="dv">9</span><span class="kw">,</span> list)) <span class="kw">;</span>
+<span class="dt">Strom</span> <span class="kw">=</span> uzel(uzel(list<span class="kw">,</span> <span class="dv">3</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">4</span><span class="kw">,</span> list))<span class="kw">,</span>
+	<span class="dv">5</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">7</span><span class="kw">,</span> uzel(list<span class="kw">,</span> <span class="dv">9</span><span class="kw">,</span> list))) <span class="kw">;</span>
+<span class="kw">false.</span>
+<span class="co">% neřeším zda vracíte všechna různá řešení</span>
+<span class="co">% v případech kdy jich existuje více</span>
+</code></pre> </div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, March  5.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+

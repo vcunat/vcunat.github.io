@@ -1,0 +1,26 @@
+digraph G {
+	margin = 0;
+	//node [ shape = triangle ];
+	ordering = out;
+
+	A1 [ label="A [k]" ];
+	u1 [ label="u (+2)" , shape = ellipse ];
+	B1 [ label="B [k]" ];
+	v1 [ label="v (+1)" , shape = ellipse ];
+	C1 [ label="C [k+1]" ];
+
+	A2 [ label="A [k]" ];
+	u2 [ label="u (0)" , shape = ellipse ];
+	B2 [ label="B [k]" ];
+	v2 [ label="v (0)" , shape = ellipse ];
+	C2 [ label="C [k+1]" ];
+
+
+	u1 -> { A1; v1 };
+	v1 -> { B1; C1 };
+
+	v2 -> { u2; C2 };
+	u2 -> { A2; B2 };
+
+
+}

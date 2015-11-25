@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cz" lang="cz"> <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Vladimír Čunát - Prolog</title>
+	<link rel="stylesheet" type="text/css" href="../../css/default.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+		_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+		_gaq.push(['_setAccount', 'UA-29555672-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		 ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		 })();
+	</script>
+</head> <body id="body">
+	<div id="main"><!-- Keep body unindented! -->
+<div id="TOC" class="level2"><h1>Prolog</h1> <ul>
+ <li><a href="#základy-syntaxe">Základy syntaxe</a></li>
+ <li><a href="#dvojí-význam-funktorů">Dvojí význam funktorů</a></li>
+ <li><a href="#standardní-seznamové-predikáty">Standardní seznamové predikáty</a></li>
+ <li><a href="#aritmetika">Aritmetika</a></li>
+ <li><a href="#zavináčové-uspořádání">Zavináčové uspořádání</a></li>
+ <li><a href="#rozdílové-seznamy">Rozdílové seznamy</a></li>
+ <li><a href="#řízení-vyhodnocování">Řízení vyhodnocování</a></li>
+ <li><a href="#odbroukovací-nástroje">Odbroukovací nástroje</a></li>
+ <li><a href="#rozdíly-od-predikátové-logiky-todo">Rozdíly od predikátové logiky (ToDo)</a></li>
+ </ul> </div>
+<div id="základy-syntaxe" class="section level2">
+<h2>Základy syntaxe</h2>
+<ul>
+<li><em>program</em> je tvořen posloupností klauzulí (také <em>databáze</em>)
+<ul>
+<li><em>pravidlo</em> má tvar <em>hlava <code>:-</code> tělo <code>.</code></em></li>
+<li><em>fakt</em> je klauzule bez těla, tedy má tvar <em>term<code>.</code></em></li>
+<li><em>dotaz</em> má tvar samotného těla, uvozuje se <code>?-</code></li>
+<li><em>direktiva</em> má jen tělo, například <code>:- consult(soubor).</code></li>
+</ul></li>
+<li><em>tělo</em> se skládá z termů spojených spojkami</li>
+<li>jako <em>spojka</em> se používá především konjunkce (<code>,</code>) a někdy také disjunkce (<code>;</code>)</li>
+<li><em>term</em> je proměnná, konstanta, nebo funktor s parametry</li>
+<li><em>proměnná</em> začíná velkým písmenem nebo podtržítkem a má platnost (scope) jen v rámci jedné klauzule</li>
+<li>jako <em>konstanty</em> slouží především numerické a řetězcové literály, například <code>3.14</code> a <code>&quot;foobar&quot;</code></li>
+<li><em>funktor</em> je dán svým názvem a aritou, v textu se tedy často značí způsobem <code>length</code>/2</li>
+<li><em>název funktoru</em> může mít tři různé tvary:
+<ul>
+<li>standardní začínají malým písmenem a pokračují libovolnými písmeny, číslicemi a podtržítky</li>
+<li>speciální jsou složeny z posloupnosti speciálních znaků</li>
+<li>řetězcové jsou tvořeny libovolným řetězcem v apostrofech</li>
+</ul></li>
+<li>nulární funktor se nazývá <em>atom</em></li>
+<li>některé funktory mají speciální význam a některé lze zapisovat infixně vzhledem ke svým parametrům</li>
+<li><em>komentáře</em> jsou jednořádkové uvozené znakem <code>%</code> a víceřádkové uzavřené mezi <code>/*</code> a <code>*/</code></li>
+<li><em>procedura</em> je název pro soubor všech klauzulí se stejným funktorem v hlavě (musí mít i stejné arity)</li>
+</ul>
+</div>
+<div id="dvojí-význam-funktorů" class="section level2">
+<h2>Dvojí význam funktorů</h2>
+<ul>
+<li>vnější funktory mají význam predikátových symbolů - reprezentují vztah mezi objekty (svými parametry)</li>
+<li>vnitřní funktory mají význam objektů - datových struktur</li>
+</ul>
+</div>
+<div id="standardní-seznamové-predikáty" class="section level2">
+<h2>Standardní seznamové predikáty</h2>
+<ul>
+<li><code>is_list(+Seznam)</code></li>
+<li><code>length(?Seznam, ?Cislo)</code></li>
+<li><code>member(?Prvek, ?Seznam)</code></li>
+<li><code>append(?S1, ?S2, ?Zretezeni)</code> a <code>append(+SeznamSeznamu, ?Zretezeni)</code></li>
+<li><code>select(?Prvek, ?Seznam, ?ZbytekSeznamu)</code></li>
+<li><code>sort(+Seznam, -Setrideny)</code>, používá <a href="#zavináčové-uspořádání">zavináčové uspořádání</a> termů a odstraňuje duplikáty</li>
+<li><code>prefix</code>/2, <code>delete</code>/3, <code>nth0</code>/3, <code>nth1</code>/3, <code>last</code>/2, <code>reverse</code>/2, <code>permutation</code>/2, <code>flatten</code>/2, <code>sumlist</code>/2, <code>same_length</code>/2, …</li>
+</ul>
+</div>
+<div id="aritmetika" class="section level2">
+<h2>Aritmetika</h2>
+<ul>
+<li>aritmetické výrazy jsou reprezentovány strukturami s přirozenými názvy funktorů</li>
+<li>binární operátory jsou jen syntaktický cukr, takže například <code>1+2*3+4 == +(+(1, *(2, 3)), 4)</code></li>
+<li>porovnávací operátory nejprve vyhodnotí oba argumenty a deterministicky rozhodnou výsledek: <code>=:=</code>, <code>=\=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>=&lt;</code> (sic)</li>
+<li>operátor <code>is</code> vyhodnotí pravou stranu a zunifikuje s levou, typické použití je <code>N1 is N+1</code></li>
+<li>pokud se Prolog pokusí vyhodnotit nesmyslnou strukturu (například s volnými proměnnými), vyvolá běhovou chybu</li>
+<li><p>pozor: unifikace (<code>=</code>/2) <em>nevyhodnocuje</em> výrazy, porovnává jako struktury</p>
+<pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="fu">?-</span> <span class="dv">1+1</span><span class="kw">=</span><span class="dv">2</span><span class="kw">.</span>
+<span class="kw">false.</span></code></pre></li>
+<li>operace pro všechna čísla: <code>+</code>, <code>-</code>, <code>*</code>, <code>abs</code>, <code>sign</code>, <code>**</code></li>
+<li>float výsledek: <code>/</code>, <code>sqrt</code>, <code>pi</code>, <code>log</code>, <code>exp</code>, <code>sin</code>, …</li>
+<li>celočíselný výsledek: <code>div</code>, <code>mod</code>, <code>//</code>, <code>rem</code>, <code>round</code>, <code>floor</code>, …</li>
+<li>bitové operátory: <code>&gt;&gt;</code>, <code>&lt;&lt;</code>, <code>\/</code>, <code>/\</code>, <code>xor</code>, <code>\</code></li>
+<li>speciální celočíselné predikáty: <code>between</code>/3, <code>succ</code>/2, <code>plus</code>/3 (nestandardizované, ale běžné)</li>
+<li><p>další časté (ale nestandardizované) operátory: <code>min</code>/2 a <code>max</code>/2, <code>gcd</code>/2, <code>random</code>/1, <code>integer</code>/1, <code>float</code>/1</p></li>
+</ul>
+</div>
+<div id="zavináčové-uspořádání" class="section level2">
+<h2>Zavináčové uspořádání</h2>
+<p>Je k dispozici úplné uspořádání na všech termech:</p>
+<ul>
+<li>operátory <code>==</code>, <code>\==</code>, <code>@&gt;</code>, <code>@&gt;=</code>, <code>@&lt;</code>, <code>@=&lt;</code></li>
+<li>pořadí: proměnné (dle adresy) <code>@&lt;</code> čísla (dle hodnoty) <code>@&lt;</code> funktory (dle arity, jména a rekurzivního uspořádání parametrů v pořadí)</li>
+<li><p>pozor: unifikací se pořadí nezákladních termů může změnit, např.:</p>
+<pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="fu">?-</span> <span class="dt">X</span><span class="kw">=</span><span class="dt">Y</span><span class="kw">,</span> <span class="dt">X</span><span class="fu">==</span><span class="dt">Y</span><span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dt">Y</span><span class="kw">.</span> 
+<span class="fu">?-</span> <span class="dt">X</span><span class="fu">==</span><span class="dt">Y</span><span class="kw">,</span> <span class="dt">X</span><span class="kw">=</span><span class="dt">Y</span><span class="kw">.</span>
+<span class="kw">false.</span>
+
+<span class="fu">?-</span> <span class="dt">X</span><span class="fu">@&lt;</span><span class="dt">Y</span><span class="kw">,</span> <span class="dt">X</span><span class="kw">=</span><span class="dv">2</span><span class="kw">,</span> <span class="dt">Y</span><span class="kw">=</span><span class="dv">1</span><span class="kw">,</span> <span class="dt">X</span><span class="fu">@&gt;</span><span class="dt">Y</span><span class="kw">.</span>
+<span class="dt">X</span> <span class="kw">=</span> <span class="dv">2</span><span class="kw">,</span>
+<span class="dt">Y</span> <span class="kw">=</span> <span class="dv">1</span><span class="kw">.</span></code></pre></li>
+</ul>
+</div>
+<div id="rozdílové-seznamy" class="section level2">
+<h2>Rozdílové seznamy</h2>
+<ul>
+<li>nekompletní datová struktura (obsahuje volnou proměnnou) zobecňující koncept akumulátoru</li>
+<li>syntax: <code>S-K</code> kde <code>K</code> je proměnná unifikovaná s koncem seznamu <code>S</code>, například <code>[1,2,3|K]-K</code></li>
+</ul>
+</div>
+<div id="řízení-vyhodnocování" class="section level2">
+<h2>Řízení vyhodnocování</h2>
+<ul>
+<li><code>call</code>/1 interpretuje argument jako predikát a zkusí ho splnit.</li>
+<li><code>once</code>/1 navíc bere jen první úspěšné řešení a dál nebacktrackuje.</li>
+<li>operátor <code>\+</code> uspěje právě když cíl <em>nejde</em> splnit (<code>not</code> je zastaralé).</li>
+<li><code>fail</code>/0 nikdy neuspěje, <code>repeat</code>/0 uspěje nekonečněkrát.<br />Spolu s “<code>If -&gt; Then; Else</code>” se hodí na imperativní kód.</li>
+<li>řez (<code>!</code>) zničí všechny doposud vytvořené alternativy v dané instanci procedury.</li>
+<li>zjištění všech odpovědí na daný dotaz: <code>findall(</code>+Vzor<code>,</code>+Cíl<code>,</code>-SeznamVzorů<code>)</code></li>
+</ul>
+</div>
+<div id="odbroukovací-nástroje" class="section level2">
+<h2>Odbroukovací nástroje</h2>
+<ul>
+<li>jsou pouze de-facto standardem, níže dle SWI-Prologu</li>
+<li><p>nastavení módu pomocí <code>debug</code>/0 a <code>nodebug</code>/0: vypnutí různých optimalizací a další nastavení unadňující hledání chyb</p></li>
+<li>lze sledovat různé události na procedurách: vstup, splnění, opakování a neúspěch</li>
+<li>módy <strong>spy</strong> a <strong>trace</strong>: <em>spy</em> pouze vypisuje události, <em>trace</em> navíc vždy zastaví a zeptá se co dělat</li>
+<li>přepínání módů na všech procedurách: <code>trace</code>/0, <code>spy</code>/0, <code>notrace</code>/0, <code>nospy/0</code></li>
+<li><code>trace</code>/1 a <code>spy</code>/1 nastaví sledování zadané procedury</li>
+<li><p>GUI pro hledání chyb: <code>guitracer</code>/0 a <code>noguitracer</code>/0</p></li>
+</ul>
+</div>
+<div id="rozdíly-od-predikátové-logiky-todo" class="section level2">
+<h2>Rozdíly od predikátové logiky (ToDo)</h2>
+<ul>
+<li>unique-names assumption</li>
+<li>closed-world assumption</li>
+<li>domain closure</li>
+<li>[AIMA 3ed: pg. 299, 343] name: database semantics</li>
+</ul>
+</div>  
+	</div>
+
+	<div id="footer">
+		<div id="modification-date">Last change of this page: 2015, February 18.</div>
+		<div id="created-by">
+			Generated by 		<a href="http://jaspervdj.be/hakyll/">hakyll</a>
+			from 				<a href="http://johnmacfarlane.net/pandoc/">pandoc</a>
+			markup; edited by 	g<a href="http://www.vim.org">vim</a>;
+			layout by 			<a href="http://masonry.desandro.com">masonry</a>.
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="../../js/masonry.min.js"> </script>
+	<script type="text/javascript">
+		window.onload = function() {
+			var wall = new Masonry( document.getElementById('main'), {
+					itemselector:	'.level2',
+					columnWidth:	50,
+					isFitWidth:		true
+				});
+		};
+
+	</script>
+
+</body> </html>
+
